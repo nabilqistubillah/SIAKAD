@@ -1,30 +1,26 @@
 <?php
 $guru = array();
 
-
-$ambil = $koneksi->query("SELECT * FROM mapel LEFT JOIN kategori ON mapel.id_kategori=kategori.id_kategori");
+$ambil = $koneksi->query("SELECT * FROM kategori");
 while($tiap = $ambil->fetch_assoc()){
-    $mapel[] = $tiap;
+    $kategori[] = $tiap;
 }
 
 ?>
 
-
-<h4>Data Mata Pelajaran</h4><br>
+<h4>Data Kategori</h4>
 <table class="table">
     <thead>
         <tr>
             <th>No</th>
-            <th>Kategori</th>
-            <th>Nama Mata Pelajaran</th>
+            <th>Nama Kategori</th>
         </tr>
     </thead>
     <tbody>
-        <?php foreach ($mapel as $key => $value):?>
+        <?php foreach ($kategori as $key => $value):?>
         <tr>
             <td><?php echo $key + 1; ?></td>
             <td><?php echo $value['nama_kategori']; ?></td>
-            <td><?php echo $value['nama_mapel']; ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

@@ -9,7 +9,7 @@ while($tiap = $ambil->fetch_assoc()){
 
 ?>
 
-<h1>Data Siswa</h1>
+<h4>Data Siswa</h4> <br>
 <table class="table">
     <thead>
         <tr>
@@ -35,3 +35,5 @@ while($tiap = $ambil->fetch_assoc()){
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<a href="" class="btn btn-outline-primary btn-sm">Tambah Data</a>

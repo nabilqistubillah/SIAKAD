@@ -76,6 +76,12 @@ include '../config/config.php';
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" href="index.php?halaman=kategori">
+              <i class="bi bi-tag"></i>
+              Kategori
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" href="index.php?halaman=mapel">
               <i class="bi bi-book"></i>
               Mata Pelajaran
@@ -142,6 +148,12 @@ include '../config/config.php';
         }
         elseif ($_GET['halaman']=="laporan_siswa"){
           include 'laporan_siswa.php';
+        }
+        elseif ($_GET['halaman']=="kategori"){
+          include 'kategori.php';
+        }
+        elseif ($_GET['halaman']=="siswakelas"){
+          include 'siswakelas.php';
         }
       }
       else{
