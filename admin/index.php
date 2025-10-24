@@ -1,3 +1,6 @@
+<?php 
+include '../config/config.php';
+?>
 
 <!doctype html>
 <html lang="en">
@@ -37,49 +40,49 @@
       <div class="position-sticky pt-3">
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">
-              <i class="bi bi-house"></i>
+            <a class="nav-link active" aria-current="page" href="index.php">
+              <i class="bi bi-house-fill"></i>
               Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=tahun">
               <i class="bi bi-calendar"></i>
               Tahun
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=guru">
               <i class="bi bi-person-badge"></i>
               Guru
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=siswa">
               <i class="bi bi-person"></i>
               Siswa
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=jurusan">
               <i class="bi bi-archive"></i>
               Jurusan
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=kelas">
               <i class="bi bi-bank"></i>
               Kelas
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=mapel">
               <i class="bi bi-book"></i>
-              Mata Pelajarn
+              Mata Pelajaran
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
+            <a class="nav-link" href="index.php?halaman=mengajar">
               <i class="bi bi-highlighter"></i>
               Mengajar
             </a>
@@ -89,156 +92,64 @@
         <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
           <span>Laporan</span>
           <a class="link-secondary" href="#" aria-label="Add a new report">
-            <span data-feather="plus-circle"></span>
+            <i class="bi bi-layers"></i>
           </a>
         </h6>
         <ul class="nav flex-column mb-2">
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="bi bi-highlighter"></i>
+            <a class="nav-link" href="index.php?halaman=laporan_nilai">
+              <i class="bi bi-file-earmark-text"></i>
               Nilai
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">
-              <i class="bi bi-file-arrow-down"></i>
-              Statistik Siswa
+            <a class="nav-link" href="index.php?laporan_siswa">
+              <i class="bi bi-bar-chart-line"></i>
+              Statistik Siswa (grafik)
             </a>
           </li>
+
         </ul>
       </div>
     </nav>
 
     <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
+      <?php 
+      if (isset($_GET['halaman'])){
+        if ($_GET['halaman']=="tahun"){
+          include 'tahun.php';
+        }
+        elseif ($_GET['halaman']=="guru"){
+          include 'guru.php';
+        }
+        elseif ($_GET['halaman']=="mengajar"){
+          include 'mengajar.php';
+        }
+        elseif ($_GET['halaman']=="siswa"){
+          include 'siswa.php';
+        }
+        elseif ($_GET['halaman']=="jurusan"){
+          include 'jurusan.php';
+        }
+        elseif ($_GET['halaman']=="kelas"){
+          include 'kelas.php';
+        }
+        elseif ($_GET['halaman']=="mapel"){
+          include 'mapel.php';
+        }
+        elseif ($_GET['halaman']=="laporan_nilai"){
+          include 'laporan_nilai.php';
+        }
+        elseif ($_GET['halaman']=="laporan_siswa"){
+          include 'laporan_siswa.php';
+        }
+      }
+      else{
+        include 'dashboard.php';
+      }
+      ?>
+      
 
-      <h2>Section title</h2>
-      <div class="table-responsive">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,010</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,011</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,012</td>
-              <td>text</td>
-              <td>placeholder</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,013</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>visual</td>
-            </tr>
-            <tr>
-              <td>1,014</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,015</td>
-              <td>random</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>text</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
     </main>
   </div>
 </div>
