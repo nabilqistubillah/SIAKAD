@@ -128,17 +128,35 @@ include '../config/config.php';
         elseif ($_GET['halaman']=="guru"){
           include 'guru.php';
         }
+        elseif ($_GET['halaman']=="guru_tambah"){
+          include 'guru_tambah.php';
+        }
+        elseif ($_GET['halaman']=="guru_edit"){
+          include 'guru_edit.php';
+        }
+        elseif ($_GET['halaman']=="guru_hapus"){
+          include 'guru_hapus.php';
+        }
         elseif ($_GET['halaman']=="mengajar"){
           include 'mengajar.php';
         }
         elseif ($_GET['halaman']=="siswa"){
           include 'siswa.php';
         }
+        elseif ($_GET['halaman']=="siswa_tambah"){
+          include 'siswa_tambah.php';
+        }
         elseif ($_GET['halaman']=="jurusan"){
           include 'jurusan.php';
         }
         elseif ($_GET['halaman']=="kelas"){
           include 'kelas.php';
+        }
+        elseif ($_GET['halaman']=="kelas_tambah"){
+          include 'kelas_tambah.php';
+        }
+        elseif ($_GET['halaman']=="kelas_edit"){
+          include 'kelas_edit.php';
         }
         elseif ($_GET['halaman']=="mapel"){
           include 'mapel.php';

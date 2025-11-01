@@ -32,8 +32,11 @@ while($tiap = $ambil->fetch_assoc()){
             <td><?php echo $value['jenjang_kelas']; ?></td>
             <td>
                 <a href="index.php?halaman=siswakelas&id=<?php echo $value['id_kelas']; ?>" class="btn btn-info btn-sm">Siswa</a>
+                <a href="index.php?halaman=kelas_edit&id=<?php echo $value['id_kelas']; ?>" class="btn btn-warning btn-sm">Edit</a>
             </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<a href="index.php?halaman=kelas_tambah" class="btn btn-outline-primary btn-sm">Tambah Data</a>
