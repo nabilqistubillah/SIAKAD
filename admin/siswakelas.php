@@ -39,17 +39,32 @@ $ambil = $koneksi->query("SELECT * FROM siswakelas
     </div>
 </div>
 
+<?php 
+//siswa yang blm ada kelas
+$nokelas = array();
+$idt = $kelas['id_tahun'];
+$ambil = $koneksi->query("SELECT * FROM `siswa` WHERE id_siswa NOT IN(SELECT id_siswa FROM siswakelas WHERE id_tahun='$idt')");
+while($tiap = $ambil->fetch_assoc()){
+    $nokelas[] = $tiap;
+}
+?>
+
 <a href="" class="btn btn-primary my-3" data-bs-toggle="modal" data-bs-target="#modal-masukkan-siswa">Masukkan Siswa</a>
 <div class="modal" id="modal-masukkan-siswa">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5>Masukkan Siswa ke <?php echo $kelas['nama_kelas']. " " .$kelas['nama_jurusan']." ".$kelas['tahun_ajaran'] ?></h5>
+                <h5>Masukkan Siswa ke Kelas > <?php echo $kelas['nama_kelas']. " > " .$kelas['nama_jurusan']." > ".$kelas['tahun_ajaran'] ?></h5>
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post">
                 <div class="modal-body">
-                    <input type="checkbox" name="id_siswa[]" value="">AGUS
+                    <?php foreach ($nokelas as $key => $value): ?>
+
+                    <div class="mb-1">
+                    <input type="checkbox" name="id_siswa[]" value="<?php echo $value['id_siswa']?>"> <?php echo $value['induk_siswa']." ".$value['nama_siswa']?>
+                    </div>
+                    <?php endforeach; ?>
                 </div>
                 <div class="modal-footer">
                     <button type="submit" name="simpan" class="btn btn-primary">Masukkan</button>
@@ -58,6 +73,19 @@ $ambil = $koneksi->query("SELECT * FROM siswakelas
         </div>
     </div>
 </div>
+
+<?php 
+if (isset($_POST['simpan'])){
+    $id_siswanya = $_POST['id_siswa'];
+    $id_kelas = $_GET['id'];
+
+    foreach ($id_siswanya as $key => $value) {
+        $koneksi->query("INSERT INTO siswakelas (id_siswa, id_kelas) VALUES ('$value', '$id_kelas')");
+    }
+    echo "<script>alert('Siswa Berhasil dimasukkan ke kelas')</script>";
+    echo "<script>location='index.php?halaman=siswakelas&id=$id_kelas'</script>";
+}
+?>
 
 <table class="table">
     <thead>
@@ -77,10 +105,15 @@ $ambil = $koneksi->query("SELECT * FROM siswakelas
             <td><?php echo $value['induk_siswa']?></td>
             <td><?php echo $value['nama_siswa']?></td>
             <td>
-                <a href="" class="btn btn-outline-warning btn-sm">Edit</a>
-                <a href="" class="btn btn-outline-danger btn-sm">Hapus</a>
+                <a href="" class="btn btn-outline-warning btn-sm">Detail</a>
+                <a href="index.php?halaman=siswa_hapus&id=<?php echo $value['id_siswakelas']; ?>&id_kelas=<?php echo $id; ?>" class="btn btn-outline-danger btn-sm">Hapus</a>
             </td>
         </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
+
+<?php if (empty($siswakelas)):?>
+    <div class="border border-primary p-3 mb-5">Belum Ada Siswa Di Kelas Ini</div>
+
+<?php endif; ?>
