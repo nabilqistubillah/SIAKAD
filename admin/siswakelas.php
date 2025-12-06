@@ -1,4 +1,4 @@
-<?php 
+<?php
 $id = $_GET['id'];
 
 $ambil = $koneksi->query("SELECT * FROM kelas
@@ -13,8 +13,8 @@ $ambil = $koneksi->query("SELECT * FROM siswakelas
  LEFT JOIN siswa ON siswakelas.id_siswa=siswa.id_siswa
  LEFT JOIN tahun ON siswa.id_tahun=tahun.id_tahun
  WHERE siswakelas.id_kelas = '$id'");
- while($tiap = $ambil->fetch_assoc()){
-        $siswakelas[] = $tiap;
+while ($tiap = $ambil->fetch_assoc()) {
+    $siswakelas[] = $tiap;
 }
 
 ?>
@@ -39,12 +39,15 @@ $ambil = $koneksi->query("SELECT * FROM siswakelas
     </div>
 </div>
 
-<?php 
+<?php
 //siswa yang blm ada kelas
 $nokelas = array();
 $idt = $kelas['id_tahun'];
-$ambil = $koneksi->query("SELECT * FROM `siswa` WHERE id_siswa NOT IN(SELECT id_siswa FROM siswakelas WHERE id_tahun='$idt')");
-while($tiap = $ambil->fetch_assoc()){
+$ambil = $koneksi->query("
+    SELECT * FROM siswa
+    WHERE id_siswa NOT IN (SELECT id_siswa FROM siswakelas)
+");
+while ($tiap = $ambil->fetch_assoc()) {
     $nokelas[] = $tiap;
 }
 ?>
@@ -54,16 +57,16 @@ while($tiap = $ambil->fetch_assoc()){
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5>Masukkan Siswa ke Kelas > <?php echo $kelas['nama_kelas']. " > " .$kelas['nama_jurusan']." > ".$kelas['tahun_ajaran'] ?></h5>
+                <h5>Masukkan Siswa ke Kelas > <?php echo $kelas['nama_kelas'] . " > " . $kelas['nama_jurusan'] . " > " . $kelas['tahun_ajaran'] ?></h5>
                 <button type="button" class="btn btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form method="post">
                 <div class="modal-body">
                     <?php foreach ($nokelas as $key => $value): ?>
 
-                    <div class="mb-1">
-                    <input type="checkbox" name="id_siswa[]" value="<?php echo $value['id_siswa']?>"> <?php echo $value['induk_siswa']." ".$value['nama_siswa']?>
-                    </div>
+                        <div class="mb-1">
+                            <input type="checkbox" name="id_siswa[]" value="<?php echo $value['id_siswa'] ?>"> <?php echo $value['induk_siswa'] . " " . $value['nama_siswa'] ?>
+                        </div>
                     <?php endforeach; ?>
                 </div>
                 <div class="modal-footer">
@@ -74,8 +77,8 @@ while($tiap = $ambil->fetch_assoc()){
     </div>
 </div>
 
-<?php 
-if (isset($_POST['simpan'])){
+<?php
+if (isset($_POST['simpan'])) {
     $id_siswanya = $_POST['id_siswa'];
     $id_kelas = $_GET['id'];
 
@@ -99,21 +102,23 @@ if (isset($_POST['simpan'])){
     </thead>
     <tbody>
         <?php foreach ($siswakelas as $key => $value): ?>
-        <tr>
-            <td><?php echo $key+1 ?></td>
-            <td><?php echo $value['tahun_ajaran']?></td>
-            <td><?php echo $value['induk_siswa']?></td>
-            <td><?php echo $value['nama_siswa']?></td>
-            <td>
-                <a href="" class="btn btn-outline-warning btn-sm">Detail</a>
-                <a href="index.php?halaman=siswa_hapus&id=<?php echo $value['id_siswakelas']; ?>&id_kelas=<?php echo $id; ?>" class="btn btn-outline-danger btn-sm">Hapus</a>
-            </td>
-        </tr>
+            <tr>
+                <td><?php echo $key + 1 ?></td>
+                <td><?php echo $value['tahun_ajaran'] ?></td>
+                <td><?php echo $value['induk_siswa'] ?></td>
+                <td><?php echo $value['nama_siswa'] ?></td>
+                <td>
+                    <a href="index.php?halaman=siswa_detail&id=<?php echo $value['id_siswa']; ?>"
+                        class="btn btn-warning btn-sm">Detail</a>
+
+                    <a href="index.php?halaman=siswa_hapus&id=<?php echo $value['id_siswakelas']; ?>&id_kelas=<?php echo $id; ?>" class="btn btn-outline-danger btn-sm">Hapus</a>
+                </td>
+            </tr>
         <?php endforeach; ?>
     </tbody>
 </table>
 
-<?php if (empty($siswakelas)):?>
+<?php if (empty($siswakelas)): ?>
     <div class="border border-primary p-3 mb-5">Belum Ada Siswa Di Kelas Ini</div>
 
 <?php endif; ?>

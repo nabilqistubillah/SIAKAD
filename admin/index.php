@@ -144,6 +144,10 @@ include '../config/config.php';
             include 'siswa_hapus.php';
           } elseif ($_GET['halaman'] == "siswamain_hapus") {
             include 'siswamain_hapus.php';
+          } elseif ($_GET['halaman'] == "siswa_detail") {
+            include 'siswa_detail.php';
+          } elseif ($_GET['halaman'] == "siswa_edit") {
+            include 'siswa_edit.php';
           } elseif ($_GET['halaman'] == "jurusan") {
             include 'jurusan.php';
           } elseif ($_GET['halaman'] == "kelas") {
@@ -162,6 +166,12 @@ include '../config/config.php';
             include 'kategori.php';
           } elseif ($_GET['halaman'] == "siswakelas") {
             include 'siswakelas.php';
+          } elseif ($_GET['halaman'] == "prestasi_hapus") {
+            include 'prestasi_hapus.php';
+          } elseif ($_GET['halaman'] == "pelanggaran_hapus") {
+            include 'pelanggaran_hapus.php';
+          } elseif ($_GET['halaman'] == "absensi_hapus") {
+            include 'absensi_hapus.php';
           } elseif ($_GET['halaman'] == "logout") {
             include 'logout.php';
           }

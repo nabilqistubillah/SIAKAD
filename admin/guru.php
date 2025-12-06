@@ -1,6 +1,4 @@
 <?php
-include '../config/config.php';
-
 $guru = array();
 
 
@@ -32,4 +30,4 @@ while ($tiap = $ambil->fetch_assoc()) {
     <?php endforeach ?>
 </div>
 
-<a href="index.php?halaman=guru_tambah" class="btn btn-outline-primary btn-sm">Tambah</a>
+<a href="index.php?halaman=guru_tambah" class="btn btn-primary btn-sm">Tambah</a>

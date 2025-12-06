@@ -65,6 +65,7 @@
             text-decoration: none;
             text-transform: capitalize;
             transition: 0.2s;
+            
         }
 
         .navbar a:hover {
@@ -84,7 +85,7 @@
         .homepage::before {
             content: "";
             position: absolute;
-            height: 100%;
+            height: 100vh;
             width: 100%;
             top: 0;
             left: 0;
@@ -95,7 +96,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 80vh;
+            height: 100vh;
             backdrop-filter: brightness(0.9);
         }
 
@@ -104,6 +105,7 @@
             flex: 1;
             text-align: center;
             padding: 40px;
+            margin-bottom: 65px;
         }
 
         .login-left h1 {
@@ -119,10 +121,10 @@
 
         /* Garis pembatas di tengah */
         .login-divider {
-            width: 2px;
+            width: 5px;
             height: 60%;
             background-color: rgba(255, 255, 255, 0.6);
-            margin: 0 40px;
+            margin: 0 19px;
         }
 
         /* Bagian kanan: form login */
@@ -130,6 +132,7 @@
             flex: 1;
             color: white;
             max-width: 350px;
+            margin: 0 85px 45px;
         }
 
         .login-right h2 {
