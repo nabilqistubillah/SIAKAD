@@ -111,9 +111,9 @@ include '../config/config.php';
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="index.php?laporan_siswa">
+              <a class="nav-link" href="index.php?halaman=kelas_naik">
                 <i class="bi bi-bar-chart-line"></i>
-                Statistik Siswa (grafik)
+                Kenaikan Kelas
               </a>
             </li>
 
@@ -156,12 +156,12 @@ include '../config/config.php';
             include 'kelas_tambah.php';
           } elseif ($_GET['halaman'] == "kelas_edit") {
             include 'kelas_edit.php';
+          } elseif ($_GET['halaman'] == "kelas_naik") {
+            include 'kelas_naik.php';
           } elseif ($_GET['halaman'] == "mapel") {
             include 'mapel.php';
           } elseif ($_GET['halaman'] == "laporan_nilai") {
             include 'laporan_nilai.php';
-          } elseif ($_GET['halaman'] == "laporan_siswa") {
-            include 'laporan_siswa.php';
           } elseif ($_GET['halaman'] == "kategori") {
             include 'kategori.php';
           } elseif ($_GET['halaman'] == "siswakelas") {

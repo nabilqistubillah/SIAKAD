@@ -112,6 +112,12 @@ if (isset($_POST['simpan'])) {
                         class="btn btn-warning btn-sm">Detail</a>
 
                     <a href="index.php?halaman=siswa_hapus&id=<?php echo $value['id_siswakelas']; ?>&id_kelas=<?php echo $id; ?>" class="btn btn-outline-danger btn-sm">Hapus</a>
+                    <a href="index.php?halaman=luluskan_siswa&id=<?= $value['id_siswa']; ?>&id_kelas=<?= $id; ?>"
+                        class="btn btn-success btn-sm"
+                        onclick="return confirm('Yakin meluluskan siswa ini?')">
+                        Luluskan
+                    </a>
+
                 </td>
             </tr>
         <?php endforeach; ?>
