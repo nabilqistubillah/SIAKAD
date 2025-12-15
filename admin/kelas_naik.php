@@ -179,7 +179,7 @@ if (isset($_POST['Luluskan'])) {
 
     foreach ($data as $id_siswa) {
 
-        // ubah status jadi LULUS
+        // menset status ke LULUS
         $koneksi->query("UPDATE siswa 
             SET status='LULUS'
             WHERE id_siswa='$id_siswa'

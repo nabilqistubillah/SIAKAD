@@ -1,5 +1,5 @@
 <?php
-// ambil tahun ajaran
+// tahun ajaran
 $tahun = $koneksi->query("SELECT * FROM tahun");
 
 // filter
@@ -11,7 +11,7 @@ if (isset($_POST['filter'])) {
     }
 }
 
-// ambil data alumni
+// data alumni
 $alumni = $koneksi->query("SELECT s.*, t.tahun_ajaran
     FROM siswa s
     LEFT JOIN tahun t ON s.id_tahun = t.id_tahun
@@ -40,7 +40,7 @@ $alumni = $koneksi->query("SELECT s.*, t.tahun_ajaran
     </div>
 </form>
 
-<!-- TABEL ALUMNI -->
+<!-- Tabelalumni -->
 <table class="table table-bordered table-striped">
     <thead class="table-light">
         <tr>
