@@ -45,7 +45,7 @@ while($tiap = $ambil->fetch_assoc()){
                 <?php endif; ?>
             </td>
             <td>
-                <a href="index.php?halaman=siswamain_hapus&id=<?php echo $value['id_siswa'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus siswa ini?')">Hapus Permanen</a>
+                <a href="index.php?halaman=siswamain_hapus&id=<?php echo $value['id_siswa'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus siswa ini?')">Hapus Data</a>
             </td>
         </tr>
         <?php endforeach; ?>

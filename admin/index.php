@@ -11,7 +11,7 @@ include '../config/config.php';
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.88.1">
-  <title>Dashboard Template · Bootstrap v5.1</title>
+  <title>SIAKAD</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
@@ -80,7 +80,7 @@ include '../config/config.php';
             <li class="nav-item">
               <a class="nav-link" href="index.php?halaman=kategori">
                 <i class="bi bi-tag"></i>
-                Kategori
+                Nilai
               </a>
             </li>
             <li class="nav-item">
@@ -105,15 +105,15 @@ include '../config/config.php';
           </h6>
           <ul class="nav flex-column mb-2">
             <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=laporan_nilai">
+              <a class="nav-link" href="index.php?halaman=alumni">
                 <i class="bi bi-file-earmark-text"></i>
-                Nilai
+                Alumni
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="index.php?laporan_siswa">
+              <a class="nav-link" href="index.php?halaman=kelas_naik">
                 <i class="bi bi-bar-chart-line"></i>
-                Statistik Siswa (grafik)
+                Kenaikan Kelas
               </a>
             </li>
 
@@ -156,12 +156,14 @@ include '../config/config.php';
             include 'kelas_tambah.php';
           } elseif ($_GET['halaman'] == "kelas_edit") {
             include 'kelas_edit.php';
+          } elseif ($_GET['halaman'] == "kelas_naik") {
+            include 'kelas_naik.php';
+          } elseif ($_GET['halaman'] == "alumni") {
+            include 'alumni.php';
           } elseif ($_GET['halaman'] == "mapel") {
             include 'mapel.php';
           } elseif ($_GET['halaman'] == "laporan_nilai") {
             include 'laporan_nilai.php';
-          } elseif ($_GET['halaman'] == "laporan_siswa") {
-            include 'laporan_siswa.php';
           } elseif ($_GET['halaman'] == "kategori") {
             include 'kategori.php';
           } elseif ($_GET['halaman'] == "siswakelas") {
