@@ -1,7 +1,6 @@
 <?php
 $siswa = array();
 
-// Ambil semua data siswa beserta tahun dan status kelas
 $ambil = $koneksi->query("
     SELECT siswa.*, tahun.tahun_ajaran, 
     CASE 
