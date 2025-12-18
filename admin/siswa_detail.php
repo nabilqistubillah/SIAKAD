@@ -42,15 +42,14 @@ $absensi = $koneksi->query("
 
   <!-- Foto Siswa -->
   <div class="text-center mb-4">
-    <?php if (!empty($siswa['foto'])): ?>
-      <img src="foto_siswa/<?php echo $siswa['foto']; ?>" 
-           class="rounded-circle shadow"
-           style="width:150px; height:150px; object-fit:cover;">
-    <?php else: ?>
-      <img src="../assets/siswa/" 
-           class="rounded-circle shadow"
-           style="width:150px; height:150px; object-fit:cover;">
-    <?php endif; ?>
+    <?php
+    $foto = !empty($siswa['foto_siswa'])
+      ? "../assets/siswa/" . $siswa['foto_siswa']
+      : "../assets/siswa/2025121616075467b3a27c-3705-4c90-a21d-ac36959a4e43.jpg";
+    ?>
+    <img src="<?= $foto ?>"
+      class="rounded-circle shadow"
+      style="width:180px;height:170px;object-fit:cover;">
   </div>
 
   <!-- Data Siswa -->

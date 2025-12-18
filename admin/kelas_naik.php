@@ -102,7 +102,7 @@ if (isset($_POST['tampilkan'])) {
         <div class="col-md-4">
             <label>Kelas Tujuan (untuk Naik Kelas)</label>
             <select name="kelas_tujuan" class="form-control">
-                <option value="">-- Pilih Kelas Tujuan --</option>
+                <option value="">Pilih Kelas Tujuan</option>
                 <?php
                 $kelas = $koneksi->query("SELECT * FROM kelas");
                 while ($k = $kelas->fetch_assoc()):

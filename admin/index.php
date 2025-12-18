@@ -44,7 +44,7 @@ include '../config/config.php';
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="index.php">
                 <i class="bi bi-house-fill"></i>
-                Dashboard
+                Beranda
               </a>
             </li>
             <li class="nav-item">

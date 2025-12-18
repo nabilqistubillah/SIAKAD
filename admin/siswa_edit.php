@@ -64,8 +64,8 @@ while ($kl = $q2->fetch_assoc()) {
         <label>Foto (biarkan kosong jika tidak diganti)</label><br>
 
         <?php if (!empty($siswa['foto_siswa'])): ?>
-            <img src="assets/siswa/<?= $siswa['foto_siswa']; ?>" 
-                 style="width:120px;height:150px;object-fit:cover;" class="mb-2">
+            <img src="assets/siswa/<?= $siswa['foto_siswa']; ?>"
+                style="width:120px;height:150px;object-fit:cover;" class="mb-2">
         <?php endif; ?>
 
         <input type="file" name="foto" class="form-control">
@@ -95,24 +95,26 @@ if (isset($_POST['simpan'])) {
     $alamat = $_POST['alamat'];
     $id_kelas_baru = $_POST['id_kelas'];
 
-    // proses foto
-    $foto_baru = $_FILES['foto']['name'];
-    $tmp_foto = $_FILES['foto']['tmp_name'];
+    // PROSES FOTO
+if (!empty($_FILES['foto']['name'])) {
 
-    if (!empty($foto_baru)) {
-        $nama_baru = date("YmdHis").$foto_baru;
-        move_uploaded_file($tmp_foto, "../assets/siswa/".$nama_baru);
+    $nama_baru = date("YmdHis") . "_" . basename($_FILES['foto']['name']);
+    $folder = "../assets/siswa/";
 
-        // hapus foto lama
-        if (!empty($siswa['foto_siswa']) && file_exists("../assets/siswa/".$siswa['foto_siswa'])) {
-            unlink("../assets/siswa/".$siswa['foto_siswa']);
+    if (move_uploaded_file($_FILES['foto']['tmp_name'], $folder . $nama_baru)) {
+
+        if (!empty($siswa['foto_siswa']) && file_exists($folder . $siswa['foto_siswa'])) {
+            unlink($folder . $siswa['foto_siswa']);
         }
 
-        $koneksi->query("UPDATE siswa SET 
-            foto_siswa='$nama_baru'
+        $koneksi->query("
+            UPDATE siswa SET foto_siswa='$nama_baru'
             WHERE id_siswa='$id'
         ");
     }
+}
+
+
 
     // update data pribadi
     $koneksi->query("UPDATE siswa SET 

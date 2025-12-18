@@ -392,16 +392,6 @@
             exit;
         }
 
-        // login guru
-        $ambilguru = $koneksi->query("SELECT * FROM guru WHERE induk_guru='$username' AND pw_guru='" . sha1($password) . "'");
-        $cekguru = $ambilguru->fetch_assoc();
-        if (!empty($cekguru)) {
-            $_SESSION["guru"] = $cekguru;
-            echo "<script>alert('Login guru berhasil')</script>";
-            echo "<script>location='guru/index.php'</script>";
-            exit;
-        }
-
         // login siswa
         $ambilsiswa = $koneksi->query("SELECT * FROM siswa WHERE nama_siswa='$username' AND induk_siswa='$password'");
         $ceksiswa = $ambilsiswa->fetch_assoc();
