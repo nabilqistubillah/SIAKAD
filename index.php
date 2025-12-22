@@ -18,315 +18,279 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Quicksand', sans-serif;
         }
-
-        html,
         body {
-            scroll-behavior: smooth;
-            background: #f2f2f2;
-
+            background-color:#f4f6f9;
+            color: #333;
+            line-height: 1.6;
         }
 
-        header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: #333;
-            z-index: 100;
+        a {
+            text-decoration: none;
+            color: #333;
+            line-height: inherit;
+        }
+        ul{
+            list-style: none;
         }
 
         .flex {
             display: flex;
-            align-items: center;
+            gap: 20px;
         }
 
         .container {
             max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 0 20px;
+            margin:  auto;
+            padding: 60 20px;
         }
 
-        .navbar {
+        .section-title{
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .section-title h2{
+            font-size: 32px;
+            color: #0d47a1;
+        }
+
+        .section-title p{
+           max-width: 700px;
+           margin: 10px auto 0;
+           color: #555;
+        }
+
+        header{
+            background-color: #0d47a1;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar_container_flex {
+            max-width: 1100px;
+            margin: auto;
+            padding: 15px 20px;
+            display: flex;
             justify-content: space-between;
+            align-items: center;
         }
 
-        .nav-links {
-            gap: 25px;
-            list-style: none;
-        }
-
-        .navbar a {
-            padding: 16px 0;
-            display: inline-block;
+        .logo a{
             color: #fff;
-            text-decoration: none;
-            text-transform: capitalize;
-            transition: 0.2s;
-            
+            font-size: 24px;
+            font-weight: bold;
         }
-
-        .navbar a:hover {
-            color: rgb(122, 122, 245);
+        .nav-links li a {
+            color: #fff;
+            font-size: 16px;
+            transition: 0.3s;
         }
+        .nav-links li a:hover {
+            color: #ffeb3b;
+        }
+    
 
         /* Home Page */
         .homepage {
-            position: relative;
-            height: 100vh;
-            width: 100%;
-            background: url(./assets/home_bg.JPG);
-            background-position: top;
-            background-size: cover;
+            background: linear-gradient(to right, #0d47a1, #1976d2);
+            padding: 80px 20px;
         }
 
-        .homepage::before {
-            content: "";
-            position: absolute;
-            height: 100vh;
-            width: 100%;
-            top: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.6);
-        }
-
-        .login-container {
+        .login-container{
+            max-width: 900px;
+            margin: auto;
+            background: #fff;
+            border-radius: 10px;
             display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            backdrop-filter: brightness(0.9);
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
-        /* Bagian kiri: teks nama sekolah */
         .login-left {
             flex: 1;
-            text-align: center;
-            padding: 40px;
-            margin-bottom: 65px;
+            padding: 50px;
+            background: #0d47a1;
+            color: #fff;
+            background: url('assets/home_bg.JPG') no-repeat center center;
         }
 
         .login-left h1 {
-            font-size: 32px;
-            margin-bottom: 10px;
-            color: #fff;
+           width: 2px;
+           background-color: #e0e0e0;
         }
 
-        .login-left p {
-            font-size: 16px;
-            color: #ddd;
-        }
+        
 
         /* Garis pembatas di tengah */
         .login-divider {
-            width: 5px;
-            height: 60%;
-            background-color: rgba(255, 255, 255, 0.6);
-            margin: 0 19px;
+            width: 2px;
+            background-color: #e0e0e0;
         }
 
-        /* Bagian kanan: form login */
         .login-right {
             flex: 1;
-            color: white;
-            max-width: 350px;
-            margin: 0 85px 45px;
+            padding: 50px;
         }
 
         .login-right h2 {
             margin-bottom: 20px;
-            color: #fff;
+            color: #0d47a1;
         }
 
         .input-group {
             margin-bottom: 15px;
-            display: flex;
-            flex-direction: column;
         }
 
         .input-group label {
-            margin-bottom: 5px;
-            font-weight: 500;
-        }
-
-        .input-group input {
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background-color: rgba(255, 255, 255, 0.8);
-            color: #000;
-        }
-
-        .input-group input:focus {
-            outline: 2px solid #007bff;
-        }
-
-        button {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 6px;
-            background-color: #007bff;
-            color: white;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        a {
-            display: block;
-            margin-top: 10px;
-            text-align: center;
-            color: #fff;
-            text-decoration: none;
             font-size: 14px;
         }
 
-        a:hover {
-            text-decoration: underline;
-        }
-
-        /* bagian menu */
-        section {
-            padding-top: 80px;
-        }
-
-        .section-title {
-            text-align: center;
-        }
-
-        section h2 {
-            font-size: 2rem;
-            margin-bottom: 15px;
-        }
-
-        section .cards {
-            margin-top: 50px;
-            flex-wrap: wrap;
-            justify-content: space-between;
-        }
-
-        section .card {
-            width: calc(95% / 2 - 30px);
-            text-align: center;
-            list-style: none;
-            background-color: #fff;
-            padding: 40px 15px;
-            border-radius: 8px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
-            transition: 0.3s;
-        }
-
-        section .first:hover {
-            color: #fff;
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        section .card img {
-            height: 120px;
-            width: 120px;
-            border-radius: 50px;
-            margin-bottom: 20px;
-        }
-
-        section .card p {
+        .input-group input {
+            width: 100%;
+            padding: 10px;
             margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .login-right button {
+            width: 100%;
+            padding: 10px;
+            background-color: #0d47a1;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+            cursor: pointer;
         }
 
-        /* bagian portofolio */
-        .portfolio .card {
-            width: calc(100% / 3 - 30px);
+        .login-right button:hover {
+            background-color: #08306b;
+        }
+
+        .login-right a {
+            display: block;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #0d47a1;
             text-align: center;
-            list-style: none;
-            background-color: #fff;
-            padding: 40px 15px;
-            border-radius: 8px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-            margin-bottom: 40px;
+        }
+
+        .cards {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            width: 250px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
             transition: 0.3s;
         }
 
-        .portfolio .card img {
-            height: 240px;
+        .card img {
             width: 100%;
-            border-radius: 8px 8px 0 0;
+            height: 160px;
+            object-fit: cover;
         }
 
-        /* contact */
-        .contact .row {
-            justify-content: space-between;
-            margin: 60px 0 90px;
+        .card h3 {
+            padding: 15px 15px 0;
+            color: #0d47a1;
         }
 
-        .contact .row .col {
-            padding: 0 10px;
-            width: calc(100% / 2 - 50px);
+        .card p {
+            padding: 10px 15px 20px;
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .contact {
+            background-color: #e3f2ff;
+        }
+        .row {
+            align-items: flex-start;
+            flex-wrap: wrap;
         }
 
-        .contact .row .col p {
-            color: hwb(236 56% 6%);
-            margin-bottom: 23px;
+        .col {
+            flex: 1;
+            min-width: 280px;
         }
 
-        .contact .row .col p i {
-            margin-right: 15px;
-            color: hsl(236, 100%, 51%);
+        .contact-detail p {
+            margin-bottom: 10px;
+            font-size: 14px;
         }
 
-        .contact form input {
+        .contact-detail i {
+            margin-right: 10px;
+            color: #0d47a1;
+        }
+
+        .form input,
+        .form textarea {
             width: 100%;
-            height: 45px;
-            margin-bottom: 20px;
-            padding: 0 15px;
-            border: 1px solid #bfbfbf;
-            outline: none;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
         }
-
-        .contact form textarea {
-            padding: 15px;
-            width: 100%;
-            height: 120px;
-            outline: none;
+        .form textarea {
             resize: none;
-            border: 1px solid #bfbfbf;
+            height: 120px;
         }
 
-        .contact form button {
-            padding: 10px 20px;
-            border-radius: 8px;
-            font-size: 16px;
+        .form button {
+            background-color: #0d47a1;
             color: #fff;
-            margin-top: 10px;
+            padding: 10px;
+            width: 100%;
             border: none;
-            background: hsl(236, 100%, 51%);
+            border-radius: 5px;
             cursor: pointer;
-            transition: 0.2s;
         }
 
-        .contact form button:hover {
-            background: rgb(122, 122, 245);
+        .form button:hover {
+            background-color: #08306b;
         }
 
-        /* footer */
+        /* =====================
+        FOOTER
+        ===================== */
         .footer {
-            background: #333;
-            padding: 20px 0;
-            text-align: center;
-        }
-
-        .footer span {
+            background-color: #0d47a1;
             color: #fff;
+            text-align: center;
+            padding: 20px;
+            font-size: 14px;
         }
 
-        /* Responsive */
-        .navbar .menu-btn {
-            display: none;
+        /* =====================
+        RESPONSIVE
+        ===================== */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+            }
+
+            .login-divider {
+                display: none;
+            }
+
+            .navbar_container_flex {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
         }
     </style>
 </head>
@@ -338,7 +302,7 @@
             <h2 class="logo"><a href="#">LOGO</a></h2>
 
             <ul class="nav-links flex">
-                <li><a href="#homepage">Login</a></li>
+                <!-- <li><a href="#homepage">Login</a></li> -->
                 <li><a href="#menu">Login</a></li>
                 <li><a href="#portfolio">Portfolio</a></li>
                 <li><a href="#contactus">Tentang Sekolah</a></li>
@@ -389,6 +353,16 @@
             $_SESSION["admin"] = $cekadmin;
             echo "<script>alert('Login admin berhasil')</script>";
             echo "<script>location='admin/index.php'</script>";
+            exit;
+        }
+
+        // login guru
+        $ambilguru = $koneksi->query("SELECT * FROM guru WHERE induk_guru='$username' AND pw_guru='" . sha1($password) . "'");
+        $cekguru = $ambilguru->fetch_assoc();
+        if (!empty($cekguru)) {
+            $_SESSION["guru"] = $cekguru;
+            echo "<script>alert('Login guru berhasil')</script>";
+            echo "<script>location='guru/index.php'</script>";
             exit;
         }
 
