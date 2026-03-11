@@ -2,193 +2,326 @@
 include '../config/config.php';
 ?>
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.88.1">
-  <title>SIAKAD</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - SIAKAD Premium</title>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        heading: ['"Outfit"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            200: '#bfdbfe',
+                            300: '#93c5fd',
+                            400: '#60a5fa',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                            950: '#172554',
+                        },
+                        secondary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            200: '#bae6fd',
+                            300: '#7dd3fc',
+                            400: '#38bdf8',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            800: '#075985',
+                            900: '#0c4a6e',
+                        },
+                        dark: '#0f172a',
+                        sidebar: '#0f172a',
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'glow': '0 0 15px rgba(59, 130, 246, 0.5)',
+                    }
+                }
+            }
+        }
+    </script>
+     <style>
+        /* Custom scrollbar */
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        
+        /* Glassmorphism utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .sidebar-glass {
+            background: linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 1) 100%);
+            backdrop-filter: blur(20px);
+        }
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.1/examples/dashboard/">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+        /* Transitions */
+        .fade-in {
+            animation: fadeIn 0.4s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-  <!-- Custom styles for this template -->
-  <link href="css/dashboard.css" rel="stylesheet">
+        /* Table styles compatibility */
+        .table { width: 100%; text-align: left; border-collapse: separate; border-spacing: 0; }
+        .table th { background-color: #f8fafc; color: #475569; font-weight: 600; padding: 1rem; border-bottom: 2px solid #e2e8f0; }
+        .table td { padding: 1rem; border-bottom: 1px solid #e2e8f0; color: #334155; }
+        .table tr:last-child td { border-bottom: none; }
+        .table tr:hover td { background-color: #f8fafc; }
+        
+        /* Button styles compatibility */
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 0.5rem 1rem; font-weight: 500; border-radius: 0.5rem; transition: all 0.2s; cursor: pointer; text-decoration: none; border: 1px solid transparent; }
+        .btn:hover { transform: translateY(-1px); }
+        .btn:active { transform: translateY(0); }
+        
+        .btn-primary { background-color: #3b82f6; color: white; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); }
+        .btn-primary:hover { background-color: #2563eb; box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.3); }
+        
+        .btn-danger { background-color: #ef4444; color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
+        .btn-danger:hover { background-color: #dc2626; box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.3); }
+        
+        .btn-success { background-color: #10b981; color: white; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); }
+        .btn-success:hover { background-color: #059669; box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3); }
+        
+        .btn-warning { background-color: #f59e0b; color: white; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2); }
+        .btn-warning:hover { background-color: #d97706; box-shadow: 0 6px 8px -1px rgba(245, 158, 11, 0.3); }
+
+        .btn-sm { padding: 0.25rem 0.75rem; font-size: 0.875rem; }
+    </style>
 </head>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased overflow-hidden">
 
-<body>
+    <div class="flex h-screen w-full">
+        <!-- Sidebar -->
+        <aside class="w-72 sidebar-glass text-white flex flex-col fixed md:relative z-30 h-full transition-all duration-300 transform -translate-x-full md:translate-x-0 shadow-2xl" id="sidebar">
+            <!-- Brand -->
+            <div class="h-20 flex items-center justify-center border-b border-gray-700/50 bg-gray-900/50">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-primary-500/30">
+                        <i class="fas fa-graduation-cap text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-heading font-bold tracking-tight text-white">SIAKAD</h1>
+                        <p class="text-xs text-gray-400 font-medium">Administrator Panel</p>
+                    </div>
+                </div>
+            </div>
 
-  <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3" href="#">SMK Al-Miftah Putri</a>
-    <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-    <div class="navbar-nav">
-      <div class="nav-item text-nowrap">
-        <a class="nav-link px-3" href="index.php?halaman=logout">Sign out</a>
-      </div>
-    </div>
-  </header>
+            <!-- Navigation -->
+            <div class="flex-1 overflow-y-auto py-6 px-4 scrollbar-hide space-y-1">
+                <p class="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 font-heading">Menu Utama</p>
+                <?php
+                $halaman = $_GET['halaman'] ?? '';
+                $menuItems = [
+                    '' => ['icon' => 'fa-home', 'label' => 'Dashboard'],
+                    'tahun' => ['icon' => 'fa-calendar-alt', 'label' => 'Tahun Ajaran'],
+                    'guru' => ['icon' => 'fa-chalkboard-user', 'label' => 'Data Guru'],
+                    'siswa' => ['icon' => 'fa-user-graduate', 'label' => 'Data Siswa'],
+                    'jurusan' => ['icon' => 'fa-layer-group', 'label' => 'Jurusan'],
+                    'kelas' => ['icon' => 'fa-door-open', 'label' => 'Kelas_Ruang'],
+                    'kategori' => ['icon' => 'fa-clipboard-list', 'label' => 'Kategori Nilai'],
+                    'mapel' => ['icon' => 'fa-book-open', 'label' => 'Mata Pelajaran'],
+                    'mengajar' => ['icon' => 'fa-person-chalkboard', 'label' => 'Jadwal Mengajar'],
+                ];
 
-  <div class="container-fluid">
-    <div class="row">
-      <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-        <div class="position-sticky pt-3">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="index.php">
-                <i class="bi bi-house-fill"></i>
-                Beranda
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=tahun">
-                <i class="bi bi-calendar"></i>
-                Tahun
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=guru">
-                <i class="bi bi-person-badge"></i>
-                Guru
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=siswa">
-                <i class="bi bi-person"></i>
-                Siswa
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=jurusan">
-                <i class="bi bi-archive"></i>
-                Jurusan
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=kelas">
-                <i class="bi bi-bank"></i>
-                Kelas
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=kategori">
-                <i class="bi bi-tag"></i>
-                Nilai
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=mapel">
-                <i class="bi bi-book"></i>
-                Mata Pelajaran
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=mengajar">
-                <i class="bi bi-highlighter"></i>
-                Mengajar
-              </a>
-            </li>
-          </ul>
+                foreach ($menuItems as $key => $item) {
+                    $isActive = ($halaman == $key);
+                    $activeClass = $isActive 
+                        ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' 
+                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white hover:translate-x-1';
+                    
+                    $iconClass = $isActive ? 'text-white' : 'text-gray-500 group-hover:text-white';
+                    $href = "index.php" . ($key ? "?halaman=$key" : "");
+                    
+                    echo "<a href='$href' class='group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 mb-1 $activeClass'>
+                            <div class='w-8 flex justify-center mr-2 transition-colors duration-200'>
+                                <i class='fas {$item['icon']} $iconClass text-lg'></i>
+                            </div>
+                            {$item['label']}
+                            " . ($isActive ? "<i class='fas fa-chevron-right ml-auto text-xs opacity-70'></i>" : "") . "
+                          </a>";
+                }
+                ?>
+                
+                <div class="my-4 border-t border-gray-700/50"></div>
+                
+                <p class="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 font-heading">Laporan & Arsip</p>
+                <?php
+                $reportItems = [
+                        'alumni' => ['icon' => 'fa-user-tie', 'label' => 'Data Alumni'],
+                        'kelas_naik' => ['icon' => 'fa-chart-line', 'label' => 'Kenaikan Kelas'],
+                ];
+                    foreach ($reportItems as $key => $item) {
+                    $isActive = ($halaman == $key);
+                    $activeClass = $isActive 
+                        ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' 
+                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white hover:translate-x-1';
+                    
+                    $iconClass = $isActive ? 'text-white' : 'text-gray-500 group-hover:text-white';
+                    
+                    echo "<a href='index.php?halaman=$key' class='group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 mb-1 $activeClass'>
+                            <div class='w-8 flex justify-center mr-2 transition-colors duration-200'>
+                                <i class='fas {$item['icon']} $iconClass text-lg'></i>
+                            </div>
+                            {$item['label']}
+                            " . ($isActive ? "<i class='fas fa-chevron-right ml-auto text-xs opacity-70'></i>" : "") . "
+                          </a>";
+                }
+                ?>
+            </div>
 
-          <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
-            <span>Laporan</span>
-            <a class="link-secondary" href="#" aria-label="Add a new report">
-              <i class="bi bi-layers"></i>
-            </a>
-          </h6>
-          <ul class="nav flex-column mb-2">
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=alumni">
-                <i class="bi bi-file-earmark-text"></i>
-                Alumni
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="index.php?halaman=kelas_naik">
-                <i class="bi bi-bar-chart-line"></i>
-                Kenaikan Kelas
-              </a>
-            </li>
+            <!-- Profile/Logout Bottom -->
+            <div class="p-4 border-t border-gray-700/50 bg-gray-900/30 backdrop-blur-sm">
+                <a href="index.php?halaman=logout" class="flex items-center gap-3 p-2 rounded-xl hover:bg-red-500/10 hover:text-red-400 transition-all group">
+                    <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
+                        <i class="fas fa-sign-out-alt text-sm"></i>
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-300 group-hover:text-red-300">Logout</p>
+                    </div>
+                </a>
+            </div>
+        </aside>
 
-          </ul>
+        <!-- Main Content Wrapper -->
+        <div class="flex-1 flex flex-col min-w-0 h-full relative">
+            <!-- Top Header -->
+            <header class="h-16 glass z-20 flex items-center justify-between px-4 sm:px-6 sticky top-0 border-b border-gray-200/50 shadow-sm">
+                <button class="md:hidden p-2 rounded-lg text-gray-500 hover:bg-gray-100 focus:outline-none transition-colors" id="sidebar-toggle">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+                
+                <!-- Breadcrumbs/Page Title -->
+                <div class="hidden md:flex items-center text-sm font-medium text-gray-500">
+                    <span class="hover:text-primary-600 cursor-pointer transition-colors">Admin</span>
+                    <i class="fas fa-chevron-right text-xs mx-2 text-gray-400"></i>
+                    <span class="text-gray-800 font-semibold capitalize">
+                        <?= $halaman ? str_replace('_', ' ', $halaman) : 'Dashboard' ?>
+                    </span>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-4 ml-auto">
+                    <!-- Notifications (Mockup) -->
+                    <button class="relative p-2 text-gray-400 hover:text-primary-600 transition-colors rounded-full hover:bg-gray-100">
+                        <i class="far fa-bell text-lg"></i>
+                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
+                    </button>
+
+                    <!-- Profile Dropdown -->
+                    <div class="flex items-center pl-4 border-l border-gray-200">
+                        <div class="text-right mr-3 hidden sm:block">
+                            <p class="text-sm font-bold text-gray-800 font-heading">Administrator</p>
+                            <p class="text-xs text-gray-500">Super Admin</p>
+                        </div>
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 p-0.5 shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                            <img src="https://ui-avatars.com/api/?name=Admin&background=random&color=fff" alt="Profile" class="h-full w-full rounded-full object-cover border-2 border-white">
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Area -->
+            <main class="flex-1 overflow-y-auto p-4 sm:p-6 md:p-8 scroll-smooth relative z-0">
+                <!-- Background Decoration -->
+                <div class="absolute inset-0 z-[-1] opacity-50 pointer-events-none" style="background-image: radial-gradient(#cbd5e1 1px, transparent 1px); background-size: 24px 24px;"></div>
+                
+                <div class="max-w-7xl mx-auto fade-in">
+                    <?php
+                    // Page Routing Logic
+                    if (isset($_GET['halaman'])) {
+                        $hal = $_GET['halaman'];
+                        $allowed_pages = [
+                            'tahun', 'guru', 'guru_tambah', 'guru_edit', 'guru_hapus', 
+                            'mengajar', 'siswa', 'siswa_tambah', 'siswa_hapus', 'siswamain_hapus',
+                            'siswa_detail', 'siswa_edit', 'jurusan', 'kelas', 'kelas_tambah', 
+                            'kelas_edit', 'kelas_naik', 'alumni', 'mapel', 'laporan_nilai', 
+                            'kategori', 'siswakelas', 'prestasi_hapus', 'pelanggaran_hapus', 
+                            'absensi_hapus', 'logout'
+                        ];
+
+                        if (in_array($hal, $allowed_pages)) {
+                            // Security check: ensure file exists before including
+                            if (file_exists($hal . '.php')) {
+                                include $hal . '.php';
+                            } else {
+                                echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'>
+                                        <span class='font-medium'>Error!</span> Halaman tidak ditemukan.
+                                      </div>";
+                            }
+                        } else {
+                            include 'dashboard.php';
+                        }
+                    } else {
+                        include 'dashboard.php';
+                    }
+                    ?>
+                </div>
+            </main>
         </div>
-      </nav>
-
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 pt-4">
-        <?php
-        if (isset($_GET['halaman'])) {
-          if ($_GET['halaman'] == "tahun") {
-            include 'tahun.php';
-          } elseif ($_GET['halaman'] == "guru") {
-            include 'guru.php';
-          } elseif ($_GET['halaman'] == "guru_tambah") {
-            include 'guru_tambah.php';
-          } elseif ($_GET['halaman'] == "guru_edit") {
-            include 'guru_edit.php';
-          } elseif ($_GET['halaman'] == "guru_hapus") {
-            include 'guru_hapus.php';
-          } elseif ($_GET['halaman'] == "mengajar") {
-            include 'mengajar.php';
-          } elseif ($_GET['halaman'] == "siswa") {
-            include 'siswa.php';
-          } elseif ($_GET['halaman'] == "siswa_tambah") {
-            include 'siswa_tambah.php';
-          } elseif ($_GET['halaman'] == "siswa_hapus") {
-            include 'siswa_hapus.php';
-          } elseif ($_GET['halaman'] == "siswamain_hapus") {
-            include 'siswamain_hapus.php';
-          } elseif ($_GET['halaman'] == "siswa_detail") {
-            include 'siswa_detail.php';
-          } elseif ($_GET['halaman'] == "siswa_edit") {
-            include 'siswa_edit.php';
-          } elseif ($_GET['halaman'] == "jurusan") {
-            include 'jurusan.php';
-          } elseif ($_GET['halaman'] == "kelas") {
-            include 'kelas.php';
-          } elseif ($_GET['halaman'] == "kelas_tambah") {
-            include 'kelas_tambah.php';
-          } elseif ($_GET['halaman'] == "kelas_edit") {
-            include 'kelas_edit.php';
-          } elseif ($_GET['halaman'] == "kelas_naik") {
-            include 'kelas_naik.php';
-          } elseif ($_GET['halaman'] == "alumni") {
-            include 'alumni.php';
-          } elseif ($_GET['halaman'] == "mapel") {
-            include 'mapel.php';
-          } elseif ($_GET['halaman'] == "laporan_nilai") {
-            include 'laporan_nilai.php';
-          } elseif ($_GET['halaman'] == "kategori") {
-            include 'kategori.php';
-          } elseif ($_GET['halaman'] == "siswakelas") {
-            include 'siswakelas.php';
-          } elseif ($_GET['halaman'] == "prestasi_hapus") {
-            include 'prestasi_hapus.php';
-          } elseif ($_GET['halaman'] == "pelanggaran_hapus") {
-            include 'pelanggaran_hapus.php';
-          } elseif ($_GET['halaman'] == "absensi_hapus") {
-            include 'absensi_hapus.php';
-          } elseif ($_GET['halaman'] == "logout") {
-            include 'logout.php';
-          }
-          } else {
-            include 'dashboard.php';
-          }
-        ?>
-
-
-      </main>
     </div>
-  </div>
+    
+    <!-- Mobile Sidebar Overlay -->
+    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm z-20 hidden transition-opacity duration-300 md:hidden" id="sidebar-overlay"></div>
 
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebarOverlay = document.getElementById('sidebar-overlay');
+        const body = document.body;
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+        function toggleSidebar() {
+            const isClosed = sidebar.classList.contains('-translate-x-full');
+            if (isClosed) {
+                sidebar.classList.remove('-translate-x-full');
+                sidebarOverlay.classList.remove('hidden');
+                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10); // Fade in
+                body.style.overflow = 'hidden'; 
+            } else {
+                sidebar.classList.add('-translate-x-full');
+                sidebarOverlay.classList.add('opacity-0'); // Fade out
+                setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
+                body.style.overflow = '';
+            }
+        }
+
+        sidebarToggle.addEventListener('click', toggleSidebar);
+        sidebarOverlay.addEventListener('click', toggleSidebar);
+    </script>
 </body>
-
 </html>
