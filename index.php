@@ -130,7 +130,7 @@ if (isset($_POST['login'])) {
                             <i class="fas fa-user-lock text-3xl"></i>
                         </div>
                         <h2 class="text-2xl font-bold text-white">Login Portal</h2>
-                        <p class="text-gray-300 text-sm mt-1">Masuk sebagai Siswa atau Admin</p>
+                        <p class="text-gray-300 text-sm mt-1">Masuk sebagai Wali Siswa atau Admin</p>
                     </div>
 
                     <form method="post" class="space-y-6">
@@ -159,7 +159,7 @@ if (isset($_POST['login'])) {
                                 <input type="checkbox" class="mr-2 rounded bg-white/10 border-gray-600 text-primary focus:ring-offset-0 focus:ring-2 focus:ring-primary">
                                 Ingat Saya
                             </label>
-                            <a href="#" class="text-primary hover:text-indigo-400 transition">Lupa Password?</a>
+                            <a href="lupa_password.php" class="text-primary hover:text-indigo-400 transition">Lupa Password?</a>
                         </div>
 
                         <button type="submit" name="login" class="w-full py-3 bg-gradient-to-r from-primary to-indigo-600 hover:from-indigo-600 hover:to-indigo-700 text-white font-bold rounded-lg shadow-lg transform hover:-translate-y-0.5 transition duration-200">
@@ -355,9 +355,9 @@ if (isset($_POST['login'])) {
                     
                     <!-- Social Media Links -->
                      <div class="flex space-x-4 pt-4">
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-youtube"></i></a>
+                        <a href="https://www.tiktok.com/@smkalmiftahputri?_r=1&_t=ZS-95RCI5y1U02" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-tiktok"></i></a>
+                        <a href="" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@almiftahgrafika?si=GqGufbyP7ji32oPr" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-primary transition"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
 
@@ -367,11 +367,11 @@ if (isset($_POST['login'])) {
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Nama Lengkap</label>
-                                <input type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="John Doe" required>
+                                <input type="text" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="Nama Anda" required>
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
-                                <input type="email" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="john@example.com" required>
+                                <input type="email" class="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition" placeholder="Namaanda@example.com" required>
                             </div>
                         </div>
                         <div>

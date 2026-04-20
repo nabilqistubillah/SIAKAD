@@ -7,6 +7,7 @@ $ambil = $koneksi->query("
     (SELECT COUNT(*) FROM siswakelas WHERE siswakelas.id_siswa = siswa.id_siswa) as has_class
     FROM siswa
     LEFT JOIN tahun ON siswa.id_tahun = tahun.id_tahun
+    WHERE siswa.status = 'AKTIF'
     ORDER BY siswa.id_siswa DESC
 ");
 
@@ -30,14 +31,11 @@ if (!$ambil) {
             <p class="text-gray-500 text-sm mt-1">Kelola data seluruh siswa yang terdaftar.</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
-             <div class="relative">
+            <div class="relative">
                 <input type="text" id="searchInput" placeholder="Cari siswa..." 
                     class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-64 transition-all shadow-sm">
                 <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
             </div>
-            <a href="index.php?halaman=siswa_tambah" class="btn btn-primary shadow-lg shadow-primary-500/30">
-                <i class="fas fa-plus mr-2"></i> Tambah Siswa
-            </a>
         </div>
     </div>
 
@@ -80,14 +78,24 @@ if (!$ambil) {
                             $statusLabel = $value['has_class'] > 0 
                                 ? 'Sudah Masuk Kelas' 
                                 : 'Belum Masuk Kelas';
+                            
+                            $foto = $value['foto_siswa'];
+                            $hasFoto = !empty($foto) && file_exists("../siswa-foto/$foto");
+                            $imageSrc = $hasFoto ? "../siswa-foto/$foto" : "";
                         ?>
                         <tr class="hover:bg-gray-50/50 transition-colors group">
                             <td class="px-6 py-4 text-center text-gray-400 font-mono text-xs"><?= $key + 1 ?></td>
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-3">
-                                    <div class="w-10 h-10 rounded-full <?= $avatarColor ?> flex items-center justify-center font-bold text-sm shadow-sm">
-                                        <?= $initial ?>
-                                    </div>
+                                    <?php if($hasFoto): ?>
+                                        <div class="w-10 h-10 rounded-full overflow-hidden border border-gray-200 shadow-sm flex-shrink-0">
+                                            <img src="<?= $imageSrc ?>" alt="<?= $value['nama_siswa'] ?>" class="w-full h-full object-cover">
+                                        </div>
+                                    <?php else: ?>
+                                        <div class="w-10 h-10 rounded-full <?= $avatarColor ?> flex items-center justify-center font-bold text-sm shadow-sm flex-shrink-0">
+                                            <?= $initial ?>
+                                        </div>
+                                    <?php endif; ?>
                                     <div>
                                         <div class="font-bold text-gray-800 group-hover:text-primary-600 transition-colors"><?= $value['nama_siswa'] ?></div>
                                         <div class="text-xs text-gray-400 font-mono mt-0.5">NIS: <?= $value['induk_siswa'] ?></div>

@@ -5,15 +5,17 @@ if (isset($_POST['simpan'])) {
     $pass       = sha1($_POST['pass']);
     $nama       = $_POST['nama'];
     $alamat     = $_POST['alamat'];
+    $tanggal_lahir = isset($_POST['tanggal_lahir']) ? $_POST['tanggal_lahir'] : '';
     
     $foto_nama  = "";
     if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
         $foto_nama = date("YmdHis") . "_" . preg_replace("/[^a-zA-Z0-9.]/", "", $_FILES['foto']['name']);
-        move_uploaded_file($_FILES['foto']['tmp_name'], "../assets/siswa/" . $foto_nama);
+        move_uploaded_file($_FILES['foto']['tmp_name'], "../siswa-foto/" . $foto_nama);
     }
     
-    $query = $koneksi->query("INSERT INTO siswa (id_tahun, induk_siswa, pw_siswa, nama_siswa, alamat_siswa, foto_siswa, status) 
-        VALUES ('$tahun', '$nis', '$pass', '$nama', '$alamat', '$foto_nama', 'AKTIF')");
+    $stmt = $koneksi->prepare("INSERT INTO siswa (id_tahun, induk_siswa, pw_siswa, nama_siswa, tanggal_lahir, alamat_siswa, foto_siswa, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'AKTIF')");
+    $stmt->bind_param("sssssss", $tahun, $nis, $pass, $nama, $tanggal_lahir, $alamat, $foto_nama);
+    $query = $stmt->execute();
     
     if ($query) {
         echo "<script>alert('Data siswa berhasil disimpan!');location='index.php?halaman=siswa';</script>";

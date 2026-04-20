@@ -59,7 +59,7 @@ while ($kl = $q2->fetch_assoc()) {
                          <div class="relative w-32 h-32 mb-4 group cursor-pointer">
                             <div class="w-full h-full rounded-2xl overflow-hidden border-4 border-gray-100 shadow-inner bg-gray-50">
                                 <?php if (!empty($siswa['foto_siswa'])): ?>
-                                    <img id="preview-img-edit" src="../assets/siswa/<?= $siswa['foto_siswa']; ?>" class="w-full h-full object-cover">
+                                    <img id="preview-img-edit" src="../siswa-foto/<?= $siswa['foto_siswa']; ?>" class="w-full h-full object-cover">
                                 <?php else: ?>
                                      <img id="preview-img-edit" class="w-full h-full object-cover hidden">
                                      <div id="default-icon-edit" class="w-full h-full flex items-center justify-center text-gray-300">
@@ -119,6 +119,10 @@ while ($kl = $q2->fetch_assoc()) {
                             <label class="block text-sm text-gray-600 mb-1">Nama Lengkap</label>
                             <input type="text" name="nama" value="<?= $siswa['nama_siswa']; ?>" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" required>
                         </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Tanggal Lahir</label>
+                            <input type="date" name="tanggal_lahir" value="<?= $siswa['tanggal_lahir']; ?>" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" required>
+                        </div>
 
                          <div>
                             <label class="block text-sm text-gray-600 mb-1">Alamat Lengkap</label>
@@ -156,11 +160,12 @@ if (isset($_POST['simpan'])) {
     $nama = $_POST['nama'];
     $alamat = $_POST['alamat'];
     $id_kelas_baru = $_POST['id_kelas'];
+    $tanggal_lahir = $_POST['tanggal_lahir'];
 
     // PROSES FOTO
     if (!empty($_FILES['foto']['name'])) {
         $nama_baru = date("YmdHis") . "_" . basename($_FILES['foto']['name']);
-        $folder = "../assets/siswa/";
+        $folder = "../siswa-foto/";
 
         if (move_uploaded_file($_FILES['foto']['tmp_name'], $folder . $nama_baru)) {
             if (!empty($siswa['foto_siswa']) && file_exists($folder . $siswa['foto_siswa'])) {
@@ -171,10 +176,14 @@ if (isset($_POST['simpan'])) {
     }
 
     // update data pribadi
-    $koneksi->query("UPDATE siswa SET id_tahun='$id_tahun', induk_siswa='$nis', nama_siswa='$nama', alamat_siswa='$alamat' WHERE id_siswa='$id'");
+    $stmt = $koneksi->prepare("UPDATE siswa SET id_tahun=?, induk_siswa=?, nama_siswa=?, tanggal_lahir=?, alamat_siswa=? WHERE id_siswa=?");
+    $stmt->bind_param("ssssss", $id_tahun, $nis, $nama, $tanggal_lahir, $alamat, $id);
+    $stmt->execute();
 
     // update kelas
-    $koneksi->query("UPDATE siswakelas SET id_kelas='$id_kelas_baru' WHERE id_siswa='$id'");
+    $stmt2 = $koneksi->prepare("UPDATE siswakelas SET id_kelas=? WHERE id_siswa=?");
+    $stmt2->bind_param("ss", $id_kelas_baru, $id);
+    $stmt2->execute();
 
     echo "<script>alert('Perubahan berhasil disimpan');</script>";
     echo "<script>location='index.php?halaman=siswa_detail&id=$id';</script>";

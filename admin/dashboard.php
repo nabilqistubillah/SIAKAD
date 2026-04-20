@@ -21,7 +21,7 @@ function getSingle($koneksi, $sql)
 
 // DATA RINGKAS
 $jml_siswa   = getCount($koneksi, "SELECT COUNT(*) j FROM siswa WHERE status='AKTIF'");
-$jml_alumni  = getCount($koneksi, "SELECT COUNT(*) j FROM siswa WHERE status=''");
+$jml_alumni  = getCount($koneksi, "SELECT COUNT(*) j FROM siswa WHERE status='LULUS'");
 $jml_kelas   = getCount($koneksi, "SELECT COUNT(*) j FROM kelas");
 $jml_jurusan = getCount($koneksi, "SELECT COUNT(*) j FROM jurusan");
 $jml_guru    = getCount($koneksi, "SELECT COUNT(*) j FROM guru");
@@ -159,6 +159,7 @@ $tahun = getSingle($koneksi, "
                         SELECT s.induk_siswa, s.nama_siswa, t.tahun_ajaran, s.status
                         FROM siswa s
                         LEFT JOIN tahun t ON s.id_tahun=t.id_tahun
+                        WHERE s.status='AKTIF'
                         ORDER BY s.id_siswa DESC
                         LIMIT 5
                     ");

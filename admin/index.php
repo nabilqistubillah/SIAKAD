@@ -7,7 +7,7 @@ include '../config/config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - SIAKAD Premium</title>
+    <title>Admin Dashboard - SIAKAD</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -148,12 +148,12 @@ include '../config/config.php';
                 <?php
                 $halaman = $_GET['halaman'] ?? '';
                 $menuItems = [
-                    '' => ['icon' => 'fa-home', 'label' => 'Dashboard'],
+                    '' => ['icon' => 'fa-home', 'label' => 'Beranda'],
                     'tahun' => ['icon' => 'fa-calendar-alt', 'label' => 'Tahun Ajaran'],
                     'guru' => ['icon' => 'fa-chalkboard-user', 'label' => 'Data Guru'],
                     'siswa' => ['icon' => 'fa-user-graduate', 'label' => 'Data Siswa'],
                     'jurusan' => ['icon' => 'fa-layer-group', 'label' => 'Jurusan'],
-                    'kelas' => ['icon' => 'fa-door-open', 'label' => 'Kelas_Ruang'],
+                    'kelas' => ['icon' => 'fa-door-open', 'label' => 'Kelas'],
                     'kategori' => ['icon' => 'fa-clipboard-list', 'label' => 'Kategori Nilai'],
                     'mapel' => ['icon' => 'fa-book-open', 'label' => 'Mata Pelajaran'],
                     'mengajar' => ['icon' => 'fa-person-chalkboard', 'label' => 'Jadwal Mengajar'],
@@ -183,8 +183,9 @@ include '../config/config.php';
                 <p class="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 font-heading">Laporan & Arsip</p>
                 <?php
                 $reportItems = [
-                        'alumni' => ['icon' => 'fa-user-tie', 'label' => 'Data Alumni'],
+                        
                         'kelas_naik' => ['icon' => 'fa-chart-line', 'label' => 'Kenaikan Kelas'],
+                        'alumni' => ['icon' => 'fa-user-tie', 'label' => 'Data Alumni'],
                 ];
                     foreach ($reportItems as $key => $item) {
                     $isActive = ($halaman == $key);
@@ -270,9 +271,8 @@ include '../config/config.php';
                             'tahun', 'guru', 'guru_tambah', 'guru_edit', 'guru_hapus', 
                             'mengajar', 'siswa', 'siswa_tambah', 'siswa_hapus', 'siswamain_hapus',
                             'siswa_detail', 'siswa_edit', 'jurusan', 'kelas', 'kelas_tambah', 
-                            'kelas_edit', 'kelas_naik', 'alumni', 'mapel', 'laporan_nilai', 
-                            'kategori', 'siswakelas', 'prestasi_hapus', 'pelanggaran_hapus', 
-                            'absensi_hapus', 'logout'
+                            'kelas_edit', 'kelas_naik', 'alumni', 'mapel', 'kategori', 'mapel_tambah', 'mapel_hapus', 'laporan_nilai', 'siswakelas', 'prestasi_hapus', 'pelanggaran_hapus', 
+                            'absensi_hapus', 'nilai_hapus', 'logout'
                         ];
 
                         if (in_array($hal, $allowed_pages)) {

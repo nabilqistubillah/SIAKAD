@@ -41,8 +41,8 @@ while ($tiap = $ambil->fetch_assoc()) {
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="guruGrid">
             <?php foreach ($guru as $key => $value): 
                 $foto = $value['foto_guru'];
-                $hasFoto = !empty($foto) && file_exists("../assets/guru/$foto");
-                $imageSrc = $hasFoto ? "../assets/guru/$foto" : "https://ui-avatars.com/api/?name=".urlencode($value['nama_guru'])."&background=random&size=256";
+                $hasFoto = !empty($foto) && file_exists("../foto_guru/$foto");
+                $imageSrc = $hasFoto ? "../foto_guru/$foto" : "https://ui-avatars.com/api/?name=".urlencode($value['nama_guru'])."&background=random&size=256";
             ?>
                 <div class="bg-white rounded-2xl shadow-soft border border-gray-100 overflow-hidden group hover:shadow-lg transition-all hover:-translate-y-1 guru-card">
                     <!-- Image Area -->

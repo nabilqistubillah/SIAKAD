@@ -21,7 +21,7 @@ $absensi = $koneksi->query("
 <div class="bg-white rounded-2xl shadow-sm p-8 mb-8 flex flex-col md:flex-row items-center justify-between relative overflow-hidden">
     <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
     <div class="relative z-10">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Selamat Datang Wali, <span class="text-primary"><?= $_SESSION['siswa']['nama_siswa'] ?></span>!</h1>
+        <h4 class="text-2xl font-bold text-gray-800 mb-2">Selamat Datang Wali, <span class="text-primary"><?= $_SESSION['siswa']['nama_siswa'] ?></span>!</h4>
         <p class="text-gray-500 text-lg">
             <?php if ($kelas): ?>
                 Kelas <span class="font-semibold text-gray-700"><?= $kelas['nama_kelas'] ?></span> &bull; <?= $kelas['nama_jurusan'] ?>

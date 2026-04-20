@@ -26,10 +26,15 @@ if (!$ambil) {
             <h2 class="text-2xl font-bold font-heading text-gray-800">Mata Pelajaran</h2>
             <p class="text-gray-500 text-sm mt-1">Daftar kurikulum mata pelajaran sekolah.</p>
         </div>
-        <div class="relative">
-             <input type="text" id="searchMapel" placeholder="Cari pelajaran..." 
-                class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-64 transition-all shadow-sm">
-            <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <div class="relative">
+                 <input type="text" id="searchMapel" placeholder="Cari pelajaran..." 
+                    class="pl-10 pr-4 py-2 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent w-full sm:w-64 transition-all shadow-sm">
+                <i class="fas fa-search absolute left-3 top-2.5 text-gray-400 text-sm"></i>
+            </div>
+            <a href="index.php?halaman=mapel_tambah" class="bg-primary-600 text-white hover:bg-primary-700 px-4 py-2 rounded-xl text-sm font-medium transition flex items-center justify-center shadow-sm">
+                <i class="fas fa-plus mr-2"></i> Tambah Pelajaran
+            </a>
         </div>
     </div>
 
@@ -40,9 +45,10 @@ if (!$ambil) {
                 <thead class="bg-gray-50/50 text-gray-500 font-semibold uppercase text-xs tracking-wider border-b border-gray-100">
                     <tr>
                         <th class="px-6 py-4 w-16 text-center">No</th>
-                        <th class="px-6 py-4">Kategori Mapel</th>
-                        <th class="px-6 py-4">Nama Mata Pelajaran</th>
+                        <th class="px-6 py-4">Kategori MataPelajaran</th>
+                        <th class="px-6 py-4">Mata Pelajaran</th>
                         <th class="px-6 py-4 text-center w-24">ID</th>
+                        <th class="px-6 py-4 text-center w-24">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-100">
@@ -79,8 +85,13 @@ if (!$ambil) {
                                     <?= $value['nama_mapel'] ?>
                                 </span>
                             </td>
-                             <td class="px-6 py-4 text-center">
+                            <td class="px-6 py-4 text-center">
                                 <span class="font-mono text-xs text-gray-400">#<?= $value['id_mapel'] ?></span>
+                            </td>
+                            <td class="px-6 py-4 text-center">
+                                <a href="index.php?halaman=mapel_hapus&id=<?= $value['id_mapel'] ?>" class="text-red-500 hover:text-red-700 transition" onclick="return confirm('Yakin hapus mata pelajaran ini? Semua data terkait mungkin ikut terhapus.')" title="Hapus Mapel">
+                                    <i class="fas fa-trash-alt"></i>
+                                </a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

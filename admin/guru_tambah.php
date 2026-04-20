@@ -6,7 +6,7 @@ if (isset($_POST['simpan'])) {
     // Rename file if uploaded
     if (!empty($namafoto)) {
         $namafoto = date("YmdHis") . "_" . preg_replace("/[^a-zA-Z0-9.]/", "", $namafoto);
-        move_uploaded_file($lokasifoto, "../assets/guru/" . $namafoto);
+        move_uploaded_file($lokasifoto, "../foto_guru/" . $namafoto);
     } else {
         $namafoto = "";
     }

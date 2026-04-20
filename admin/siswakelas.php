@@ -37,7 +37,7 @@ while ($tiap = $ambil->fetch_assoc()) {
              <a href="index.php?halaman=kelas" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
                 <i class="fas fa-arrow-left mr-2"></i>Kembali
             </a>
-            <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200" data-bs-toggle="modal" data-bs-target="#modal-masukkan-siswa">
+            <button class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200" onclick="openModalSiswa()">
                 <i class="fas fa-user-plus mr-2"></i>Tambah Siswa
             </button>
         </div>
@@ -75,14 +75,23 @@ while ($tiap = $ambil->fetch_assoc()) {
                     <?php else: ?>
                         <?php foreach ($siswakelas as $key => $value): 
                              $initial = strtoupper(substr($value['nama_siswa'], 0, 1));
+                             $foto = $value['foto_siswa'];
+                             $hasFoto = !empty($foto) && file_exists("../siswa-foto/$foto");
+                             $imageSrc = $hasFoto ? "../siswa-foto/$foto" : "";
                         ?>
                             <tr class="hover:bg-gray-50 transition-colors group">
                                 <td class="px-6 py-4 text-center text-gray-400 font-mono text-xs"><?= $key + 1 ?></td>
                                 <td class="px-6 py-4">
                                      <div class="flex items-center gap-3">
-                                        <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">
-                                            <?= $initial ?>
-                                        </div>
+                                        <?php if($hasFoto): ?>
+                                            <div class="w-8 h-8 rounded-full overflow-hidden border border-gray-200">
+                                                <img src="<?= $imageSrc ?>" alt="<?= $value['nama_siswa'] ?>" class="w-full h-full object-cover">
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="w-8 h-8 rounded-full bg-indigo-100 text-indigo-600 flex items-center justify-center font-bold text-xs">
+                                                <?= $initial ?>
+                                            </div>
+                                        <?php endif; ?>
                                         <div class="font-medium text-gray-800 group-hover:text-indigo-600 transition-colors">
                                             <?= $value['nama_siswa'] ?>
                                         </div>
@@ -113,77 +122,175 @@ while ($tiap = $ambil->fetch_assoc()) {
     </div>
 </div>
 
-<!-- Modal Masukkan Siswa -->
+<!-- Modal Masukkan Siswa Baru -->
 <?php
-//siswa yang blm ada kelas
-$nokelas = array();
-$idt = $kelas['id_tahun'];
-$ambil = $koneksi->query("
-    SELECT * FROM siswa
-    WHERE id_siswa NOT IN (SELECT id_siswa FROM siswakelas)
-    ORDER BY nama_siswa ASC
-");
-while ($tiap = $ambil->fetch_assoc()) {
-    $nokelas[] = $tiap;
+// Ambil data tahun untuk form
+$tahun_data = [];
+$ambil_t = $koneksi->query("SELECT * FROM tahun ORDER BY id_tahun DESC");
+while ($tiap_t = $ambil_t->fetch_assoc()) {
+    $tahun_data[] = $tiap_t;
 }
 ?>
 
-<div class="modal fade" id="modal-masukkan-siswa" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content border-0 shadow-2xl rounded-2xl overflow-hidden">
-            <div class="modal-header bg-gray-50 border-b border-gray-100 px-6 py-4">
-                <div>
-                     <h5 class="modal-title font-bold text-gray-800">Tambahkan Siswa</h5>
-                     <p class="text-xs text-gray-500 mt-1">Pilih siswa yang belum memiliki kelas.</p>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            
-            <form method="post">
-                <div class="modal-body p-0">
-                    <div class="max-h-[400px] overflow-y-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-3">
-                        <?php if (empty($nokelas)): ?>
-                            <div class="col-span-2 text-center py-8 text-gray-400">
-                                <i class="fas fa-check-circle text-4xl mb-3 text-emerald-200"></i>
-                                <p>Semua siswa sudah memiliki kelas.</p>
-                            </div>
-                        <?php else: ?>
-                            <?php foreach ($nokelas as $key => $value): ?>
-                                <label class="flex items-center gap-3 p-3 border border-gray-200 rounded-xl hover:bg-indigo-50 hover:border-indigo-200 cursor-pointer transition-all group">
-                                    <input type="checkbox" name="id_siswa[]" value="<?= $value['id_siswa'] ?>" class="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500">
-                                    <div>
-                                        <div class="font-medium text-sm text-gray-700 group-hover:text-indigo-700"><?= $value['nama_siswa'] ?></div>
-                                        <div class="text-xs text-gray-400 font-mono"><?= $value['induk_siswa'] ?></div>
-                                    </div>
-                                </label>
-                            <?php endforeach; ?>
-                        <?php endif; ?>
+<!-- Modal Background (Tailwind) -->
+<div id="modal-masukkan-siswa" class="fixed inset-0 z-[100] hidden" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <!-- Backdrop -->
+    <div class="fixed inset-0 bg-gray-900/50 backdrop-blur-sm transition-opacity opacity-0 duration-300" id="modal-backdrop-siswa" onclick="closeModalSiswa()"></div>
+
+    <div class="fixed inset-0 z-10 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4 text-center sm:p-0">
+            <!-- Modal Panel -->
+            <div id="modal-panel-siswa" class="relative transform overflow-hidden rounded-2xl bg-white text-left shadow-2xl transition-all duration-300 opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95 sm:my-8 w-full max-w-3xl border border-gray-100">
+                
+                <div class="bg-gray-50 border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+                    <div>
+                         <h5 class="text-lg font-bold text-gray-800" id="modal-title">Tambahkan Siswa Baru</h5>
+                         <p class="text-xs text-gray-500 mt-1">Input data siswa baru untuk dimasukkan ke kelas ini.</p>
                     </div>
-                </div>
-                <div class="modal-footer bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-between items-center">
-                    <span class="text-xs text-gray-500"><?= count($nokelas) ?> Siswa tersedia</span>
-                    <button type="submit" name="simpan" class="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30 text-sm">
-                        <i class="fas fa-plus mr-2"></i>Tambahkan Terpilih
+                    <button type="button" onclick="closeModalSiswa()" class="text-gray-400 hover:text-gray-600 hover:bg-gray-200 p-2 rounded-lg transition-colors">
+                        <i class="fas fa-times"></i>
                     </button>
                 </div>
-            </form>
+                
+                <form method="post" enctype="multipart/form-data">
+                    <div class="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
+                        
+                        <!-- Foto Siswa -->
+                        <div class="flex flex-col items-center mb-4">
+                            <div class="relative w-24 h-24 mb-2 group cursor-pointer">
+                                <div class="w-full h-full rounded-2xl overflow-hidden border-4 border-gray-100 shadow-inner bg-gray-50" id="photo-preview-container-siswa">
+                                    <img id="preview-img-siswa" class="w-full h-full object-cover hidden">
+                                    <div id="default-icon-siswa" class="w-full h-full flex items-center justify-center text-gray-300">
+                                        <i class="fas fa-user-graduate text-2xl"></i>
+                                    </div>
+                                </div>
+                                <input type="file" name="foto" id="foto-input-siswa" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onchange="previewImageSiswa()">
+                                <div class="absolute inset-0 bg-black/40 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                    <span class="text-white text-[10px] font-medium">Ubah Foto</span>
+                                </div>
+                            </div>
+                            <p class="text-[10px] text-center text-gray-400">Foto Opsional<br>JPG/PNG maks 2MB.</p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">Nama Siswa</label>
+                                <input type="text" name="nama" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Nama Lengkap" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">NISN</label>
+                                <input type="text" name="nis" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Nomor Induk Siswa" required oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+                                <p class="text-[10px] text-gray-400 mt-1">Digunakan sebagai password default akun siswa.</p>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">Tahun Masuk</label>
+                                <select name="id_tahun" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors appearance-none" required>
+                                    <option value="">Pilih Tahun Ajaran</option>
+                                    <?php foreach ($tahun_data as $t): ?>
+                                        <option value="<?= $t['id_tahun'] ?>"><?= $t['tahun_ajaran'] ?></option>
+                                    <?php endforeach ?>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">Tanggal Lahir</label>
+                                <input type="date" name="tanggal_lahir" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm text-gray-600 mb-1">Alamat Domisili</label>
+                                <textarea name="alamat" rows="2" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors resize-none" placeholder="Alamat lengkap..." required></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end gap-3">
+                        <button type="button" onclick="closeModalSiswa()" class="px-6 py-2.5 bg-white border border-gray-300 text-gray-700 font-medium rounded-xl hover:bg-gray-50 transition text-sm">
+                            Batal
+                        </button>
+                        <button type="submit" name="simpan_siswa_baru" class="px-6 py-2.5 bg-indigo-600 text-white font-medium rounded-xl hover:bg-indigo-700 transition shadow-lg shadow-indigo-500/30 text-sm flex items-center">
+                            <i class="fas fa-save mr-2"></i>Simpan & Masukkan Kelas
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>
 
-<?php
-if (isset($_POST['simpan'])) {
-    if (!empty($_POST['id_siswa'])) {
-        $id_siswanya = $_POST['id_siswa'];
-        $id_kelas = $_GET['id'];
-    
-        foreach ($id_siswanya as $key => $value) {
-            $koneksi->query("INSERT INTO siswakelas (id_siswa, id_kelas) VALUES ('$value', '$id_kelas')");
+<script>
+    const modal = document.getElementById('modal-masukkan-siswa');
+    const backdrop = document.getElementById('modal-backdrop-siswa');
+    const panel = document.getElementById('modal-panel-siswa');
+
+    function openModalSiswa() {
+        modal.classList.remove('hidden');
+        // Force reflow
+        void modal.offsetWidth;
+        
+        backdrop.classList.remove('opacity-0');
+        backdrop.classList.add('opacity-100');
+        
+        panel.classList.remove('opacity-0', 'translate-y-4', 'sm:scale-95');
+        panel.classList.add('opacity-100', 'translate-y-0', 'sm:scale-100');
+    }
+
+    function closeModalSiswa() {
+        backdrop.classList.remove('opacity-100');
+        backdrop.classList.add('opacity-0');
+        
+        panel.classList.remove('opacity-100', 'translate-y-0', 'sm:scale-100');
+        panel.classList.add('opacity-0', 'translate-y-4', 'sm:scale-95');
+        
+        // Wait for transition to finish
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    function previewImageSiswa() {
+        const input = document.getElementById('foto-input-siswa');
+        const previewImg = document.getElementById('preview-img-siswa');
+        const defaultIcon = document.getElementById('default-icon-siswa');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.classList.remove('hidden');
+                defaultIcon.classList.add('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
         }
-        echo "<script>alert('Siswa Berhasil dimasukkan ke kelas')</script>";
-        echo "<script>location='index.php?halaman=siswakelas&id=$id_kelas'</script>";
+    }
+</script>
+
+<?php
+if (isset($_POST['simpan_siswa_baru'])) {
+    $tahun      = $_POST['id_tahun'];
+    $nis        = $_POST['nis'];
+    $pass       = sha1($nis); // Menggunakan NISN sebagai password default
+    $nama       = $_POST['nama'];
+    $alamat     = $_POST['alamat'];
+    $tanggal_lahir = $_POST['tanggal_lahir'];
+    
+    $foto_nama  = "";
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === 0) {
+        $foto_nama = date("YmdHis") . "_" . preg_replace("/[^a-zA-Z0-9.]/", "", $_FILES['foto']['name']);
+        move_uploaded_file($_FILES['foto']['tmp_name'], "../siswa-foto/" . $foto_nama);
+    }
+    
+    $stmt = $koneksi->prepare("INSERT INTO siswa (id_tahun, induk_siswa, pw_siswa, nama_siswa, alamat_siswa, foto_siswa, tanggal_lahir, status) VALUES (?, ?, ?, ?, ?, ?, ?, 'AKTIF')");
+    $stmt->bind_param("sssssss", $tahun, $nis, $pass, $nama, $alamat, $foto_nama, $tanggal_lahir);
+    $query_siswa = $stmt->execute();
+    
+    if ($query_siswa) {
+        $id_siswa_baru = $koneksi->insert_id;
+        $id_kelas = $_GET['id'];
+        
+        $koneksi->query("INSERT INTO siswakelas (id_siswa, id_kelas) VALUES ('$id_siswa_baru', '$id_kelas')");
+        
+        echo "<script>alert('Siswa berhasil ditambahkan dan dimasukkan ke kelas!');</script>";
+        echo "<script>location='index.php?halaman=siswakelas&id=$id_kelas';</script>";
     } else {
-         echo "<script>alert('Pilih siswa terlebih dahulu!')</script>";
+        echo "<script>alert('Gagal menyimpan: " . $koneksi->error . "')</script>";
     }
 }
 ?>

@@ -6,6 +6,11 @@ if (!isset($_SESSION['siswa'])) {
     exit();
 }
 $siswa = $_SESSION['siswa'];
+
+// Ambil tahun ajaran terbaru
+$ambil_tahun = $koneksi->query("SELECT tahun_ajaran FROM tahun ORDER BY id_tahun DESC LIMIT 1");
+$tahun_aktif = $ambil_tahun->fetch_assoc();
+$tahun_label = $tahun_aktif ? $tahun_aktif['tahun_ajaran'] : '-';
 ?>
 
 <!DOCTYPE html>
@@ -85,7 +90,7 @@ $siswa = $_SESSION['siswa'];
             <div class="p-6 border-b border-gray-700 text-center">
                  <div class="w-20 h-20 mx-auto rounded-full bg-gray-600 mb-3 overflow-hidden border-2 border-primary">
                     <?php if (!empty($siswa['foto_siswa'])): ?>
-                        <img src="../assets/siswa/<?= $siswa['foto_siswa'] ?>" alt="Foto" class="w-full h-full object-cover">
+                        <img src="../siswa-foto/<?= $siswa['foto_siswa'] ?>" alt="Foto" class="w-full h-full object-cover">
                     <?php else: ?>
                         <i class="fas fa-user text-4xl text-gray-400 mt-4"></i>
                     <?php endif; ?>
@@ -142,8 +147,29 @@ $siswa = $_SESSION['siswa'];
                     ?>
                 </h2>
                 
-                <div class="flex items-center ml-auto">
-                     <span class="text-gray-500 text-sm hidden md:inline-block">Tahun Ajaran: <span class="text-primary font-bold">2024/2025</span></span>
+                <!-- Right Actions -->
+                <div class="flex items-center gap-4 ml-auto">
+                     <div class="text-gray-500 text-sm hidden md:flex items-center mr-2 border-r border-gray-200 pr-4">
+                         <i class="far fa-calendar-alt mr-2"></i>
+                         Tahun Ajaran: <span class="text-primary font-bold ml-1"><?= $tahun_label ?></span>
+                     </div>
+                    
+                    <!-- Profile Section -->
+                    <div class="flex items-center">
+                        <div class="text-right mr-3 hidden sm:block">
+                            <p class="text-sm font-bold text-gray-800 font-sans"><?= $siswa['nama_siswa'] ?></p>
+                            <p class="text-xs text-gray-500">Siswa Aktif</p>
+                        </div>
+                        <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary to-secondary p-0.5 shadow-md cursor-pointer hover:shadow-lg transition-shadow">
+                            <?php if (!empty($siswa['foto_siswa'])): ?>
+                                <img src="../siswa-foto/<?= $siswa['foto_siswa'] ?>" alt="Profile" class="h-full w-full rounded-full object-cover border-2 border-white">
+                            <?php else: ?>
+                                <div class="h-full w-full rounded-full bg-gray-100 flex items-center justify-center border-2 border-white">
+                                    <i class="fas fa-user text-gray-400 text-sm"></i>
+                                </div>
+                            <?php endif; ?>
+                        </div>
+                    </div>
                 </div>
             </header>
 

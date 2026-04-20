@@ -5,47 +5,130 @@ $guru = $ambil->fetch_assoc();
 
 ?>  
   
-  <div class="row">
-    <div class="col-6">
-        <h4>Edit Guru</h4>
-        <form action="" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label>NIP</label>
-                <input type="text" class="form-control" name="nip" value="<?php echo $guru['induk_guru']?>" required>
+<div class="max-w-5xl mx-auto fade-in">
+    <form action="" method="post" enctype="multipart/form-data">
+        
+        <!-- Action Header -->
+        <div class="flex items-center justify-between mb-6 bg-white p-4 rounded-xl border border-gray-200 shadow-sm sticky top-0 z-10 hidden-print">
+            <div>
+                <h2 class="text-lg font-bold text-gray-800">Edit Guru</h2>
+                <p class="text-xs text-gray-500">Perbarui data pengajar</p>
             </div>
-            <div class="mb-3">
-                <label>Password</label>
-                <input type="text" class="form-control" name="password" required>
-                <p class="small text-primary">Kosongkan jika password tidak diubah</p>
+            <div class="flex gap-3">
+                <a href="index.php?halaman=guru" class="px-4 py-2 text-sm font-medium text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+                    Batal
+                </a>
+                <button type="submit" name="simpan" class="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors shadow-sm shadow-indigo-200">
+                    <i class="fas fa-save mr-2"></i>Simpan Perubahan
+                </button>
             </div>
-            <div class="mb-3">
-                <label>Nama</label>
-                <input type="text" class="form-control" name="nama" value="<?php echo $guru['nama_guru']?>" required>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- Left Column: Photo & Basic Account -->
+            <div class="lg:col-span-1 space-y-6">
+                <!-- Photo Card -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 text-center">Foto Profil Saat Ini</label>
+                    <div class="flex flex-col items-center mb-6">
+                        <?php if (!empty($guru['foto_guru'])): ?>
+                            <img src="../foto_guru/<?php echo $guru['foto_guru']?>" alt="Foto Guru" class="w-32 h-32 object-cover rounded-full border-4 border-gray-100 shadow-sm mb-2">
+                        <?php else: ?>
+                            <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-gray-100 shadow-inner bg-gray-50 flex items-center justify-center text-gray-300 mb-2">
+                                <i class="fas fa-user text-4xl"></i>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                    
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-4 border-t border-gray-100 pt-4 text-center">Ganti Foto Profil</label>
+                    <div class="flex flex-col items-center">
+                        <div class="relative w-32 h-32 mb-4 group cursor-pointer">
+                            <div class="w-full h-full rounded-full overflow-hidden border-4 border-gray-100 shadow-inner bg-gray-50" id="photo-preview-container">
+                                <img id="preview-img" class="w-full h-full object-cover hidden">
+                                <div id="default-icon" class="w-full h-full flex items-center justify-center text-gray-300">
+                                    <i class="fas fa-camera text-3xl"></i>
+                                </div>
+                            </div>
+                            <input type="file" name="foto" id="foto-upload" class="absolute inset-0 opacity-0 cursor-pointer" accept="image/*" onchange="previewFile()">
+                            <div class="absolute inset-0 bg-black/40 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                                <span class="text-white text-xs font-medium text-center leading-tight">Pilih<br>Ganti Foto</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-center text-gray-400">Pilih gambar jika ingin mengubah foto.<br>JPG/PNG maks 2MB.</p>
+                    </div>
+                </div>
+
+                <!-- Account Credentials -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                     <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-4">Akun Login</label>
+                     <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Password Baru</label>
+                            <input type="password" name="password" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="••••••">
+                            <p class="text-xs text-gray-400 mt-2"><i class="fas fa-info-circle mr-1"></i>Kosongkan jika password tidak diubah.</p>
+                        </div>
+                     </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label>Jenis Kelamin</label>
-                <select class="form-control" name="jk">
-                    <option value="">Pilih</option>
-                    <option value="Laki-laki" <?php echo $guru['kelamin_guru']=='laki laki' ? 'selected' : '';?> >Laki-laki</option>
-                    <option value="Perempuan" <?php echo $guru['kelamin_guru']=='Perempuan' ? 'selected' : '';?> >Perempuan</option>
-                </select>
+
+            <!-- Right Column: Personal Details -->
+            <div class="lg:col-span-2">
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm h-full">
+                    <label class="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-6 border-b border-gray-100 pb-2">Informasi Pribadi</label>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">NIP</label>
+                            <input type="text" name="nip" value="<?php echo $guru['induk_guru']?>" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Nomor Induk Pegawai" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">Nama Lengkap</label>
+                            <input type="text" name="nama" value="<?php echo $guru['nama_guru']?>" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Nama & Gelar" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-6">
+                        <label class="block text-sm text-gray-600 mb-2">Jenis Kelamin</label>
+                        <div class="flex gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 w-full transition-colors relative <?php echo (strtolower($guru['kelamin_guru']) == 'laki-laki' || strtolower($guru['kelamin_guru']) == 'laki laki') ? 'ring-2 ring-indigo-500 bg-indigo-50/50' : ''; ?>" onclick="document.querySelectorAll('input[name=jk]').forEach(el => el.parentElement.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50/50')); this.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-50/50');">
+                                <input type="radio" name="jk" value="Laki-laki" class="text-indigo-600 focus:ring-indigo-500 border-gray-300" <?php echo (strtolower($guru['kelamin_guru']) == 'laki-laki' || strtolower($guru['kelamin_guru']) == 'laki laki') ? 'checked' : ''; ?> required>
+                                <span class="text-sm text-gray-700">Laki-laki</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer p-3 border border-gray-200 rounded-lg hover:bg-gray-50 w-full transition-colors relative <?php echo (strtolower($guru['kelamin_guru']) == 'perempuan') ? 'ring-2 ring-indigo-500 bg-indigo-50/50' : ''; ?>" onclick="document.querySelectorAll('input[name=jk]').forEach(el => el.parentElement.classList.remove('ring-2', 'ring-indigo-500', 'bg-indigo-50/50')); this.classList.add('ring-2', 'ring-indigo-500', 'bg-indigo-50/50');">
+                                <input type="radio" name="jk" value="Perempuan" class="text-indigo-600 focus:ring-indigo-500 border-gray-300" <?php echo (strtolower($guru['kelamin_guru']) == 'perempuan') ? 'checked' : ''; ?> required>
+                                <span class="text-sm text-gray-700">Perempuan</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Alamat Lengkap</label>
+                        <textarea name="alamat" rows="4" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors resize-none" placeholder="Jalan, RT/RW, Kelurahan..."><?php echo $guru['alamat_guru']?></textarea>
+                    </div>
+                </div>
             </div>
-            <div class="mb-3">
-                <label>Alamat</label>
-                <textarea class="form-control" name="alamat" <?php echo $guru['alamat_guru']?> ></textarea>
-            </div>
-            <div class="mb-3">
-                <label>Foto Lama</label> <br>
-                <img src="../assets/guru/<?php echo $guru['foto_guru']?>" width="200">
-            </div>
-            <div class="mb-3">
-                <label>Ganti Foto</label>
-                <input type="file" class="form-control" name="foto">
-            </div>
-            <button class="btn btn-primary btn-sm" name="simpan">Simpan Perubahan</button>
-        </form>
-    </div>
+        </div>
+    </form>
 </div>
+
+<script>
+    function previewFile() {
+        const input = document.getElementById('foto-upload');
+        const previewImg = document.getElementById('preview-img');
+        const defaultIcon = document.getElementById('default-icon');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                previewImg.classList.remove('hidden');
+                defaultIcon.classList.add('hidden');
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
 
 <?php 
 if (isset($_POST['simpan'])) 
@@ -64,7 +147,7 @@ if (isset($_POST['simpan']))
     if(!empty($lokasifoto))
     {
         $namafoto = date("YmdHis").$namafoto;
-        move_uploaded_file($lokasifoto, "/SIAKAD/assets/guru/".$namafoto);
+        move_uploaded_file($lokasifoto, "../foto_guru/".$namafoto);
 
         //jika pass yang tidak kosong (ada)
         if(!empty($_POST['password']))
