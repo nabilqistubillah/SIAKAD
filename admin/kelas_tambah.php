@@ -7,11 +7,12 @@ if (isset($_POST['simpan'])) {
     } else {
         $id_tahun = $_POST['id_tahun'];
         $id_jurusan = $_POST['id_jurusan'];
+        $id_guru = $_POST['id_guru'] ?? 0;
         $nama_kelas = $_POST['nama_kelas'];
         $jenjang_kelas = $_POST['jenjang_kelas'];
     
-        $simpan = $koneksi->query("INSERT INTO kelas (id_tahun, id_jurusan, nama_kelas, jenjang_kelas) 
-        VALUES ('$id_tahun', '$id_jurusan', '$nama_kelas', '$jenjang_kelas')");
+        $simpan = $koneksi->query("INSERT INTO kelas (id_tahun, id_jurusan, id_guru, nama_kelas, jenjang_kelas) 
+        VALUES ('$id_tahun', '$id_jurusan', '$id_guru', '$nama_kelas', '$jenjang_kelas')");
     
         if ($simpan) {
             echo "<script>alert('Data kelas berhasil ditambahkan');location='index.php?halaman=kelas';</script>";
@@ -32,6 +33,12 @@ $jurusan = [];
 $ambil = $koneksi->query("SELECT * FROM jurusan ORDER BY nama_jurusan ASC");
 while($tiap = $ambil->fetch_assoc()){
     $jurusan[] = $tiap;
+}
+
+$guru = [];
+$ambil = $koneksi->query("SELECT * FROM guru ORDER BY nama_guru ASC");
+while($tiap = $ambil->fetch_assoc()){
+    $guru[] = $tiap;
 }
 ?>
 
@@ -94,10 +101,23 @@ while($tiap = $ambil->fetch_assoc()){
                     </div>
                 </div>
 
-                <!-- Nama Kelas -->
-                <div>
-                    <label class="block text-sm text-gray-600 mb-1">Nama Kelas</label>
-                    <input type="text" name="nama_kelas" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Contoh: XII RPL 1" required>
+                <div class="grid grid-cols-2 gap-6">
+                    <!-- Nama Kelas -->
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Nama Kelas</label>
+                        <input type="text" name="nama_kelas" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors" placeholder="Contoh: XII RPL 1" required>
+                    </div>
+
+                    <!-- Wali Kelas -->
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-1">Wali Kelas (Opsional)</label>
+                        <select name="id_guru" class="w-full px-3 py-2 bg-gray-50 border border-gray-200 rounded-lg text-sm focus:outline-none focus:bg-white focus:border-indigo-500 transition-colors appearance-none">
+                            <option value="0">Pilih Guru / Wali Kelas</option>
+                            <?php foreach ($guru as $value): ?>
+                                <option value="<?= $value['id_guru'] ?>"><?= $value['nama_guru'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    </div>
                 </div>
 
             </div>

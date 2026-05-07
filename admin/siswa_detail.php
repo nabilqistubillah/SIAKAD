@@ -16,14 +16,8 @@ try {
 if (isset($_POST['simpan_nilai'])) {
 
     $id_mapel = $_POST['id_mapel'];
-    $h1 = $_POST['h1'];
-    $h2 = $_POST['h2'];
-    $h3 = $_POST['h3'];
-    $h4 = $_POST['h4'];
     $pts = $_POST['pts'];
     $pas = $_POST['pas'];
-
-    $rph = ($h1 + $h2 + $h3 + $h4) / 4;
 
     // Cari id_siswakelas
     $sk = $koneksi->query("SELECT id_siswakelas, id_kelas FROM siswakelas WHERE id_siswa = '$id' LIMIT 1")->fetch_assoc();
@@ -45,9 +39,9 @@ if (isset($_POST['simpan_nilai'])) {
         // Simpan nilai sesuai struktur asli (id_mengajar & id_siswakelas)
         $koneksi->query("
             INSERT INTO nilai 
-            (id_mengajar, id_siswakelas, h1, h2, h3, h4, rph, pts, pas)
+            (id_mengajar, id_siswakelas, pts, pas)
             VALUES 
-            ('$id_mengajar', '$id_siswakelas', '$h1', '$h2', '$h3', '$h4', '$rph', '$pts', '$pas')
+            ('$id_mengajar', '$id_siswakelas','$pts', '$pas')
         ");
 
         echo "<script>alert('Nilai berhasil ditambahkan'); location='halaman=siswa_detail&id=$id';</script>";
@@ -66,7 +60,7 @@ $siswa = $koneksi->query("
 
 // ambil data kelas
 $kelas = $koneksi->query("
-  SELECT k.nama_kelas, j.nama_jurusan, t.tahun_ajaran, k.id_kelas 
+  SELECT k.nama_kelas, j.nama_jurusan, t.tahun_ajaran, k.id_kelas, j.id_jurusan 
   FROM siswakelas sk
   JOIN kelas k ON sk.id_kelas = k.id_kelas
   JOIN jurusan j ON k.id_jurusan = j.id_jurusan
@@ -76,7 +70,7 @@ $kelas = $koneksi->query("
 
 // ambil nilai
 $nilai = $koneksi->query("
-  SELECT n.id_nilai, m.nama_mapel, n.h1, n.h2, n.h3, n.h4, n.rph, n.pts, n.pas
+  SELECT n.id_nilai, m.nama_mapel, n.pts, n.pas
   FROM nilai n
   JOIN mengajar mg ON n.id_mengajar = mg.id_ajar
   JOIN mapel m ON mg.id_mapel = m.id_mapel
@@ -166,89 +160,91 @@ $absensi = $koneksi->query("
 
         <!-- Right Column: Details Tabs/Sections -->
         <div class="lg:col-span-2 space-y-6">
-            
-            <!-- Academic Grades --> 
-            <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden"> 
-                <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center"> 
-                    <h3 class="font-bold text-gray-800 flex items-center gap-2"> <i class="fas fa-chart-bar text-primary-600"></i> Rekap Nilai Akademik </h3> 
-                </div> 
-                <form method="post">
-                <div class="overflow-x-auto"> 
-                    <table class="w-full text-sm text-left"> 
-                        <thead class="bg-gray-50 text-gray-500 font-semibold uppercase text-xs"> 
-                            <tr> 
-                                <th class="px-6 py-3">Mata Pelajaran</th> 
-                                <th class="px-2 py-3 text-center">H1</th> 
-                                <th class="px-2 py-3 text-center">H2</th> 
-                                <th class="px-2 py-3 text-center">H3</th> 
-                                <th class="px-2 py-3 text-center">H4</th> 
-                                <th class="px-2 py-3 text-center">RPH</th> 
-                                <th class="px-2 py-3 text-center">PTS</th> 
-                                <th class="px-2 py-3 text-center">PAS</th> 
-                            </tr> 
-                        </thead> 
-                        <tbody class="divide-y divide-gray-100"> 
-                            <?php if ($nilai->num_rows > 0): ?> 
-                                <?php while ($n = $nilai->fetch_assoc()): ?> 
-                                    <tr class="hover:bg-gray-50 transition-colors"> 
-                                        <td class="px-6 py-3 font-medium text-gray-800"><?php echo $n['nama_mapel']; ?></td> 
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['h1']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['h2']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['h3']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['h4']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['rph']; ?>" class="w-16 text-center text-sm font-bold text-gray-700 bg-gray-100 rounded-md border-gray-200 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['pts']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center"><input type="number" readonly value="<?php echo $n['pas']; ?>" class="w-16 text-center text-sm rounded-md border-gray-100 bg-gray-50 focus:ring-0 cursor-not-allowed"></td>
-                                        <td class="px-2 py-3 text-center">
-                                            <a href="index.php?halaman=nilai_hapus&id=<?php echo $n['id_nilai']; ?>&ids=<?php echo $id; ?>" class="text-red-500 hover:text-red-700 transition" onclick="return confirm('Hapus baris nilai mapel ini secara permanen?')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </a>
-                                        </td>
-                                    </tr> 
-                                <?php endwhile; ?> 
-                            <?php else: ?> 
-                                <tr><td colspan="9" class="px-6 py-4 text-center text-gray-400">Belum ada data nilai.</td></tr> 
-                            <?php endif; ?> 
-                        </tbody> 
-                    </table> 
-                </div> 
-                </form>
-            </div>
-            <!--form input grades-->
-            <form method="post" class="bg-gray-50 p-4 rounded-lg border border-gray-200 mt-4">
-    <h4 class="text-xs font-bold text-gray-500 uppercase mb-3">Input Nilai</h4>
-
-    <div class="flex flex-wrap gap-3 items-end">
-
-        <!-- Pilih Mapel -->
-        <div class="w-48">
-            <label class="text-xs text-gray-500 mb-1 block">Mata Pelajaran</label>
-            <select name="id_mapel" class="w-full text-sm rounded-md border-gray-300" required>
-                <option value="">Pilih Mapel</option>
-                <?php
-                $mapel = $koneksi->query("SELECT * FROM mapel");
-                while ($m = $mapel->fetch_assoc()) {
-                    echo "<option value='{$m['id_mapel']}'>{$m['nama_mapel']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-
-        <!-- Nilai -->
-        <?php $fields = ['h1','h2','h3','h4','pts','pas']; ?>
-        <?php foreach ($fields as $f): ?>
-        <div class="w-16">
-            <label class="text-xs mb-1 block uppercase"><?= $f ?></label>
-            <input type="number" name="<?= $f ?>" class="w-full text-sm rounded-md border-gray-300" value="0">
-        </div>
-        <?php endforeach; ?>
-
-        <button type="submit" name="simpan_nilai"
-            class="px-4 py-2 bg-indigo-600 text-white text-sm rounded-md hover:bg-indigo-700 h-[38px]">
-            Simpan
-        </button>
+           <!-- Academic Grades Container -->
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-gray-50 px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h3 class="font-bold text-gray-800 flex items-center gap-2">
+            <i class="fas fa-chart-bar text-primary-600"></i> Rekap Nilai Akademik
+        </h3>
     </div>
-</form>
+
+    <form method="post">
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-50 text-gray-500 font-semibold uppercase text-xs">
+                    <tr>
+                        <th class="px-6 py-3">Mata Pelajaran</th>
+                        <th class="px-2 py-3 text-center">PTS</th>
+                        <th class="px-2 py-3 text-center">PAS</th>
+                        <th class="px-6 py-3 text-center w-20">Aksi</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-100">
+                    <?php if ($nilai->num_rows > 0): ?>
+                        <?php while ($n = $nilai->fetch_assoc()): ?>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-6 py-3 font-medium text-gray-800"><?php echo $n['nama_mapel']; ?></td>
+                                <td class="px-2 py-3 text-center">
+                                    <input type="number" readonly value="<?php echo $n['pts']; ?>" 
+                                           class="w-16 text-center text-sm rounded-md border-transparent bg-transparent cursor-not-allowed">
+                                </td>
+                                <td class="px-2 py-3 text-center">
+                                    <input type="number" readonly value="<?php echo $n['pas']; ?>" 
+                                           class="w-16 text-center text-sm rounded-md border-transparent bg-transparent cursor-not-allowed">
+                                </td>
+                                <td class="px-6 py-3 text-center">
+                                    <a href="index.php?halaman=nilai_hapus&id=<?php echo $n['id_nilai']; ?>&ids=<?php echo $id; ?>" 
+                                       class="text-red-500 hover:text-red-700 transition" 
+                                       onclick="return confirm('Hapus baris nilai mapel ini secara permanen?')">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endwhile; ?>
+                    <?php else: ?>
+                        <tr><td colspan="4" class="px-6 py-8 text-center text-gray-400 italic">Belum ada data nilai.</td></tr>
+                    <?php endif; ?>
+                </tbody>
+
+                <!-- Inline Input Form Row -->
+                <tfoot class="bg-indigo-50/50">
+                    <tr>
+                        <td class="px-6 py-4">
+                            <select name="id_mapel" class="w-full text-sm rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500" required>
+                                <option value="">Pilih Mapel Baru...</option>
+                                <?php
+                                $id_jurusan_kelas = $kelas['id_jurusan'] ?? null;
+                                $query_mapel = "SELECT * FROM mapel";
+                                if (!empty($id_jurusan_kelas)) {
+                                    $query_mapel .= " WHERE id_jurusan = '$id_jurusan_kelas' OR id_jurusan IS NULL";
+                                }
+                                $mapel = $koneksi->query($query_mapel);
+                                while ($m = $mapel->fetch_assoc()) {
+                                    echo "<option value='{$m['id_mapel']}'>{$m['nama_mapel']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </td>
+                        <td class="px-2 py-4 text-center">
+                            <input type="number" name="pts" value="0" min="0" max="100" 
+                                   class="w-16 text-center text-sm rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                        </td>
+                        <td class="px-2 py-4 text-center">
+                            <input type="number" name="pas" value="0" min="0" max="100" 
+                                   class="w-16 text-center text-sm rounded-md border-gray-300 focus:ring-indigo-500 focus:border-indigo-500">
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <button type="submit" name="simpan_nilai" 
+                                    class="bg-indigo-600 text-white p-2 rounded-md hover:bg-indigo-700 transition-colors shadow-sm inline-flex items-center justify-center">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </form>
+</div>
 
             <!-- Attendance -->
             <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

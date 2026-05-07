@@ -1,5 +1,16 @@
 <?php
+session_start();
+if (!isset($_SESSION["guru"])) {
+    echo "<script>alert('Anda harus login sebagai guru!');location='../index.php';</script>";
+    exit();
+}
 include '../config/config.php';
+
+$guru_login = $_SESSION["guru"];
+$nama_guru = $guru_login["nama_guru"];
+$foto_guru = $guru_login["foto_guru"] ?? '';
+$hasFoto = !empty($foto_guru) && file_exists("../foto_guru/$foto_guru");
+$imageSrc = $hasFoto ? "../foto_guru/$foto_guru" : "https://ui-avatars.com/api/?name=".urlencode($nama_guru)."&background=random&color=fff";
 ?>
 
 <!DOCTYPE html>
@@ -7,7 +18,7 @@ include '../config/config.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - SIAKAD</title>
+    <title>Guru Dashboard - SIMAK</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -112,15 +123,6 @@ include '../config/config.php';
         .btn-primary { background-color: #3b82f6; color: white; box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2); }
         .btn-primary:hover { background-color: #2563eb; box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.3); }
         
-        .btn-danger { background-color: #ef4444; color: white; box-shadow: 0 4px 6px -1px rgba(239, 68, 68, 0.2); }
-        .btn-danger:hover { background-color: #dc2626; box-shadow: 0 6px 8px -1px rgba(239, 68, 68, 0.3); }
-        
-        .btn-success { background-color: #10b981; color: white; box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.2); }
-        .btn-success:hover { background-color: #059669; box-shadow: 0 6px 8px -1px rgba(16, 185, 129, 0.3); }
-        
-        .btn-warning { background-color: #f59e0b; color: white; box-shadow: 0 4px 6px -1px rgba(245, 158, 11, 0.2); }
-        .btn-warning:hover { background-color: #d97706; box-shadow: 0 6px 8px -1px rgba(245, 158, 11, 0.3); }
-
         .btn-sm { padding: 0.25rem 0.75rem; font-size: 0.875rem; }
     </style>
 </head>
@@ -133,11 +135,11 @@ include '../config/config.php';
             <div class="h-20 flex items-center justify-center border-b border-gray-700/50 bg-gray-900/50">
                 <div class="flex items-center gap-3">
                     <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-primary-500 to-indigo-600 flex items-center justify-center shadow-lg shadow-primary-500/30">
-                        <i class="fas fa-graduation-cap text-xl text-white"></i>
+                        <i class="fas fa-chalkboard-teacher text-xl text-white"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl font-heading font-bold tracking-tight text-white">SIAKAD</h1>
-                        <p class="text-xs text-gray-400 font-medium">Administrator Panel</p>
+                        <h1 class="text-xl font-heading font-bold tracking-tight text-white">SIMAK</h1>
+                        <p class="text-xs text-gray-400 font-medium">Portal Guru</p>
                     </div>
                 </div>
             </div>
@@ -149,14 +151,9 @@ include '../config/config.php';
                 $halaman = $_GET['halaman'] ?? '';
                 $menuItems = [
                     '' => ['icon' => 'fa-home', 'label' => 'Beranda'],
-                    'tahun' => ['icon' => 'fa-calendar-alt', 'label' => 'Tahun Ajaran'],
-                    'guru' => ['icon' => 'fa-chalkboard-user', 'label' => 'Data Guru'],
-                    'siswa' => ['icon' => 'fa-user-graduate', 'label' => 'Data Siswa'],
-                    'jurusan' => ['icon' => 'fa-layer-group', 'label' => 'Jurusan'],
-                    'kelas' => ['icon' => 'fa-door-open', 'label' => 'Kelas'],
-                    'kategori' => ['icon' => 'fa-clipboard-list', 'label' => 'Kategori Nilai'],
-                    'mapel' => ['icon' => 'fa-book-open', 'label' => 'Mata Pelajaran'],
-                    'mengajar' => ['icon' => 'fa-person-chalkboard', 'label' => 'Jadwal Mengajar'],
+                    'kelas' => ['icon' => 'fa-door-open', 'label' => 'Kelas & Siswa'],
+                    'nilai' => ['icon' => 'fa-star', 'label' => 'Input Nilai'],
+                    'absensi' => ['icon' => 'fa-clipboard-user', 'label' => 'Rekap Absensi'],
                 ];
 
                 foreach ($menuItems as $key => $item) {
@@ -177,38 +174,11 @@ include '../config/config.php';
                           </a>";
                 }
                 ?>
-                
-                <div class="my-4 border-t border-gray-700/50"></div>
-                
-                <p class="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2 font-heading">Laporan & Arsip</p>
-                <?php
-                $reportItems = [
-                        
-                        'kelas_naik' => ['icon' => 'fa-chart-line', 'label' => 'Kenaikan Kelas'],
-                        'alumni' => ['icon' => 'fa-user-tie', 'label' => 'Data Alumni'],
-                ];
-                    foreach ($reportItems as $key => $item) {
-                    $isActive = ($halaman == $key);
-                    $activeClass = $isActive 
-                        ? 'bg-primary-600 text-white shadow-lg shadow-primary-900/20' 
-                        : 'text-gray-400 hover:bg-gray-800/50 hover:text-white hover:translate-x-1';
-                    
-                    $iconClass = $isActive ? 'text-white' : 'text-gray-500 group-hover:text-white';
-                    
-                    echo "<a href='index.php?halaman=$key' class='group flex items-center px-3 py-3 text-sm font-medium rounded-xl transition-all duration-200 mb-1 $activeClass'>
-                            <div class='w-8 flex justify-center mr-2 transition-colors duration-200'>
-                                <i class='fas {$item['icon']} $iconClass text-lg'></i>
-                            </div>
-                            {$item['label']}
-                            " . ($isActive ? "<i class='fas fa-chevron-right ml-auto text-xs opacity-70'></i>" : "") . "
-                          </a>";
-                }
-                ?>
             </div>
 
             <!-- Profile/Logout Bottom -->
             <div class="p-4 border-t border-gray-700/50 bg-gray-900/30 backdrop-blur-sm">
-                <a href="index.php?halaman=logout" class="flex items-center gap-3 p-2 rounded-xl hover:bg-red-500/10 hover:text-red-400 transition-all group">
+                <a href="logout.php" class="flex items-center gap-3 p-2 rounded-xl hover:bg-red-500/10 hover:text-red-400 transition-all group">
                     <div class="w-8 h-8 rounded-lg bg-red-500/20 flex items-center justify-center text-red-500 group-hover:bg-red-500 group-hover:text-white transition-colors">
                         <i class="fas fa-sign-out-alt text-sm"></i>
                     </div>
@@ -229,7 +199,7 @@ include '../config/config.php';
                 
                 <!-- Breadcrumbs/Page Title -->
                 <div class="hidden md:flex items-center text-sm font-medium text-gray-500">
-                    <span class="hover:text-primary-600 cursor-pointer transition-colors">Admin</span>
+                    <span class="hover:text-primary-600 cursor-pointer transition-colors">Guru</span>
                     <i class="fas fa-chevron-right text-xs mx-2 text-gray-400"></i>
                     <span class="text-gray-800 font-semibold capitalize">
                         <?= $halaman ? str_replace('_', ' ', $halaman) : 'Dashboard' ?>
@@ -238,20 +208,14 @@ include '../config/config.php';
 
                 <!-- Right Actions -->
                 <div class="flex items-center gap-4 ml-auto">
-                    <!-- Notifications (Mockup) -->
-                    <button class="relative p-2 text-gray-400 hover:text-primary-600 transition-colors rounded-full hover:bg-gray-100">
-                        <i class="far fa-bell text-lg"></i>
-                        <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white"></span>
-                    </button>
-
                     <!-- Profile Dropdown -->
                     <div class="flex items-center pl-4 border-l border-gray-200">
                         <div class="text-right mr-3 hidden sm:block">
-                            <p class="text-sm font-bold text-gray-800 font-heading">Administrator</p>
-                            <p class="text-xs text-gray-500">Super Admin</p>
+                            <p class="text-sm font-bold text-gray-800 font-heading"><?= htmlspecialchars($nama_guru) ?></p>
+                            <p class="text-xs text-gray-500">Guru</p>
                         </div>
                         <div class="h-10 w-10 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 p-0.5 shadow-md cursor-pointer hover:shadow-lg transition-shadow">
-                            <img src="https://ui-avatars.com/api/?name=Admin&background=random&color=fff" alt="Profile" class="h-full w-full rounded-full object-cover border-2 border-white">
+                            <img src="<?= $imageSrc ?>" alt="Profile" class="h-full w-full rounded-full object-cover border-2 border-white">
                         </div>
                     </div>
                 </div>
@@ -268,20 +232,15 @@ include '../config/config.php';
                     if (isset($_GET['halaman'])) {
                         $hal = $_GET['halaman'];
                         $allowed_pages = [
-                            'tahun', 'guru', 'guru_tambah', 'guru_edit', 'guru_hapus', 
-                            'mengajar', 'siswa', 'siswa_tambah', 'siswa_hapus', 'siswamain_hapus',
-                            'siswa_detail', 'siswa_edit', 'jurusan', 'kelas', 'kelas_tambah', 
-                            'kelas_edit', 'kelas_naik', 'alumni', 'mapel', 'kategori', 'mapel_tambah', 'mapel_hapus', 'laporan_nilai', 'siswakelas', 'prestasi_hapus', 'pelanggaran_hapus', 
-                            'absensi_hapus', 'nilai_hapus', 'mengajar_tambah', 'logout'
+                            'kelas', 'siswa', 'siswa_detail', 'nilai', 'nilai_input', 'absensi', 'prestasi_hapus', 'pelanggaran_hapus'
                         ];
 
                         if (in_array($hal, $allowed_pages)) {
-                            // Security check: ensure file exists before including
                             if (file_exists($hal . '.php')) {
                                 include $hal . '.php';
                             } else {
                                 echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'>
-                                        <span class='font-medium'>Error!</span> Halaman tidak ditemukan.
+                                        <span class='font-medium'>Belum Tersedia!</span> Halaman ini masih dalam tahap pengembangan.
                                       </div>";
                             }
                         } else {
@@ -310,11 +269,11 @@ include '../config/config.php';
             if (isClosed) {
                 sidebar.classList.remove('-translate-x-full');
                 sidebarOverlay.classList.remove('hidden');
-                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10); // Fade in
+                setTimeout(() => sidebarOverlay.classList.remove('opacity-0'), 10);
                 body.style.overflow = 'hidden'; 
             } else {
                 sidebar.classList.add('-translate-x-full');
-                sidebarOverlay.classList.add('opacity-0'); // Fade out
+                sidebarOverlay.classList.add('opacity-0');
                 setTimeout(() => sidebarOverlay.classList.add('hidden'), 300);
                 body.style.overflow = '';
             }

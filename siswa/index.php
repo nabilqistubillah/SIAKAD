@@ -1,4 +1,5 @@
 <?php
+session_start();
 include '../config/config.php';
 // Cek sesi siswa
 if (!isset($_SESSION['siswa'])) {

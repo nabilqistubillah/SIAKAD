@@ -6,7 +6,7 @@ $nilai = $koneksi->query("
         m.nama_mapel as mapel, 
         t.tahun_ajaran, 
         mg.semester, 
-        n.h1, n.h2, n.h3, n.h4, n.rph, n.pts, n.pas
+        n.pts, n.pas
     FROM nilai n
     JOIN siswakelas sk ON n.id_siswakelas = sk.id_siswakelas
     JOIN kelas k ON sk.id_kelas = k.id_kelas
@@ -44,11 +44,6 @@ $prestasi = $koneksi->query("
                             <th class="py-4 px-4 text-center w-12">No</th>
                             <th class="py-4 px-4">Mata Pelajaran</th>
                             <th class="py-4 px-2 text-center">SMT</th>
-                            <th class="py-4 px-2 text-center">H1</th>
-                            <th class="py-4 px-2 text-center">H2</th>
-                            <th class="py-4 px-2 text-center">H3</th>
-                            <th class="py-4 px-2 text-center">H4</th>
-                            <th class="py-4 px-2 text-center">RPH</th>
                             <th class="py-4 px-2 text-center">PTS</th>
                             <th class="py-4 px-2 text-center">PAS</th>
                             <th class="py-4 px-4 text-center">Nilai Akhir</th>
@@ -57,7 +52,7 @@ $prestasi = $koneksi->query("
                     </thead>
                     <tbody class="divide-y divide-gray-100">
                         <?php $no = 1; while ($n = $nilai->fetch_assoc()): 
-                            $nilai_akhir = round(($n['rph'] + $n['pts'] + $n['pas']) / 3);
+                            $nilai_akhir = round(($n['pts'] + $n['pas']) / 3);
                             $predikat = 'E';
                             if ($nilai_akhir >= 90) $predikat = 'A';
                             elseif ($nilai_akhir >= 80) $predikat = 'B';
@@ -71,11 +66,6 @@ $prestasi = $koneksi->query("
                                     <div class="text-xs text-gray-400 font-normal leading-tight mt-0.5">Tahun: <?= $n['tahun_ajaran']; ?></div>
                                 </td>
                                 <td class="py-4 px-2 text-center text-sm text-gray-600 font-medium"><?= $n['semester']; ?></td>
-                                <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['h1']; ?></td>
-                                <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['h2']; ?></td>
-                                <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['h3']; ?></td>
-                                <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['h4']; ?></td>
-                                <td class="py-4 px-2 text-center text-sm font-semibold text-gray-700 bg-gray-50/50"><?= $n['rph']; ?></td>
                                 <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['pts']; ?></td>
                                 <td class="py-4 px-2 text-center text-sm text-gray-600"><?= $n['pas']; ?></td>
                                 <td class="py-4 px-4 text-center">

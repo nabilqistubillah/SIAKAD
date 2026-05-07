@@ -2,11 +2,14 @@
 $mapel = array();
 // Fetch Mata Pelajaran with Category
 $ambil = $koneksi->query("
-    SELECT mapel.*, kategori.nama_kategori 
+    SELECT mapel.*, kategori.nama_kategori, jurusan.nama_jurusan 
     FROM mapel 
     LEFT JOIN kategori ON mapel.id_kategori = kategori.id_kategori
-    ORDER BY kategori.nama_kategori ASC, mapel.nama_mapel ASC
+    LEFT JOIN jurusan ON mapel.id_jurusan = jurusan.id_jurusan
+    ORDER BY jurusan.nama_jurusan ASC, kategori.nama_kategori ASC, mapel.nama_mapel ASC
 ");
+
+$jurusan_list = $koneksi->query("SELECT * FROM jurusan ORDER BY nama_jurusan ASC");
 
 if (!$ambil) {
     echo "<div class='p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50' role='alert'>
@@ -38,6 +41,19 @@ if (!$ambil) {
         </div>
     </div>
 
+    </div>
+
+    <!-- Filter Jurusan Tabs -->
+    <div class="flex overflow-x-auto gap-2 pb-2 mb-4 scrollbar-hide" id="filterTabs">
+        <button class="filter-btn active bg-primary-600 text-white px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm whitespace-nowrap" data-filter="all">Semua Jurusan</button>
+        <button class="filter-btn bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm whitespace-nowrap" data-filter="Umum">Umum (Semua)</button>
+        <?php while($j = $jurusan_list->fetch_assoc()): ?>
+            <button class="filter-btn bg-white border border-gray-200 text-gray-600 hover:bg-gray-50 px-4 py-2 rounded-xl text-sm font-medium transition shadow-sm whitespace-nowrap" data-filter="<?= htmlspecialchars($j['nama_jurusan']) ?>">
+                <?= htmlspecialchars($j['nama_jurusan']) ?>
+            </button>
+        <?php endwhile; ?>
+    </div>
+
     <!-- Data Table -->
     <div class="bg-white border border-gray-100 rounded-2xl shadow-soft overflow-hidden">
         <div class="overflow-x-auto">
@@ -46,6 +62,7 @@ if (!$ambil) {
                     <tr>
                         <th class="px-6 py-4 w-16 text-center">No</th>
                         <th class="px-6 py-4">Kategori MataPelajaran</th>
+                        <th class="px-6 py-4">Peruntukan Jurusan</th>
                         <th class="px-6 py-4">Mata Pelajaran</th>
                         <th class="px-6 py-4 text-center w-24">ID</th>
                         <th class="px-6 py-4 text-center w-24">Aksi</th>
@@ -73,12 +90,23 @@ if (!$ambil) {
                             elseif (strpos($cat, 'muatan kewilayahan') !== false) $badgeColor = 'bg-blue-50 text-blue-600 border-blue-100';
                             elseif (strpos($cat, 'peminatan') !== false) $badgeColor = 'bg-emerald-50 text-emerald-600 border-emerald-100';
                         ?>
-                        <tr class="hover:bg-gray-50/50 transition-colors group">
+                        <tr class="hover:bg-gray-50/50 transition-colors group mapel-row" data-jurusan="<?= empty($value['nama_jurusan']) ? 'Umum' : htmlspecialchars($value['nama_jurusan']) ?>">
                             <td class="px-6 py-4 text-center text-gray-400 font-mono text-xs"><?= $key + 1 ?></td>
                             <td class="px-6 py-4">
                                 <span class="<?= $badgeColor ?> text-xs font-bold px-3 py-1 rounded-full border">
                                     <?= $value['nama_kategori'] ?>
                                 </span>
+                            </td>
+                            <td class="px-6 py-4">
+                                <?php if(empty($value['nama_jurusan'])): ?>
+                                    <span class="bg-gray-100 text-gray-600 text-xs font-bold px-3 py-1 rounded-full border border-gray-200">
+                                        <i class="fas fa-globe text-gray-400 mr-1"></i> Umum
+                                    </span>
+                                <?php else: ?>
+                                    <span class="bg-indigo-50 text-indigo-600 text-xs font-bold px-3 py-1 rounded-full border border-indigo-100">
+                                        <i class="fas fa-layer-group text-indigo-400 mr-1"></i> <?= $value['nama_jurusan'] ?>
+                                    </span>
+                                <?php endif; ?>
                             </td>
                             <td class="px-6 py-4">
                                 <span class="font-bold text-gray-800 text-md group-hover:text-primary-600 transition-colors">
@@ -108,23 +136,50 @@ if (!$ambil) {
 </div>
 
 <script>
-    // Simple Search Functionality
-    document.getElementById('searchMapel').addEventListener('keyup', function() {
-        let filter = this.value.toUpperCase();
-        let rows = document.querySelector("#mapelTable tbody").rows;
+    // Filter & Search Functionality
+    const searchInput = document.getElementById('searchMapel');
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    const rows = document.querySelectorAll('tr.mapel-row');
+    
+    let currentFilter = 'all';
+
+    function applyFilters() {
+        let searchQuery = searchInput.value.toUpperCase();
         
-        for (let i = 0; i < rows.length; i++) {
-            let cells = rows[i].cells;
-            if (cells.length < 2) continue; 
-
+        rows.forEach(row => {
+            let cells = row.cells;
+            if (cells.length < 3) return; 
+            
             let category = cells[1].textContent || cells[1].innerText;
-            let name = cells[2].textContent || cells[2].innerText;
-
-            if (category.toUpperCase().indexOf(filter) > -1 || name.toUpperCase().indexOf(filter) > -1) {
-                rows[i].style.display = "";
+            let jurusan = cells[2].textContent || cells[2].innerText;
+            let name = cells[3].textContent || cells[3].innerText;
+            let rowJurusanData = row.getAttribute('data-jurusan');
+            
+            let matchesSearch = (category.toUpperCase().indexOf(searchQuery) > -1 || name.toUpperCase().indexOf(searchQuery) > -1 || jurusan.toUpperCase().indexOf(searchQuery) > -1);
+            let matchesTab = (currentFilter === 'all' || rowJurusanData === currentFilter);
+            
+            if (matchesSearch && matchesTab) {
+                row.style.display = "";
             } else {
-                 rows[i].style.display = "none";
+                row.style.display = "none";
             }
-        }
+        });
+    }
+
+    searchInput.addEventListener('keyup', applyFilters);
+
+    filterBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            // Update UI
+            filterBtns.forEach(b => {
+                b.classList.remove('bg-primary-600', 'text-white');
+                b.classList.add('bg-white', 'text-gray-600');
+            });
+            this.classList.remove('bg-white', 'text-gray-600');
+            this.classList.add('bg-primary-600', 'text-white');
+            
+            currentFilter = this.getAttribute('data-filter');
+            applyFilters();
+        });
     });
 </script>

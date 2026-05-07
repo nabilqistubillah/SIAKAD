@@ -5,16 +5,24 @@ while($tiap = $ambil_kategori->fetch_assoc()){
     $kategori[] = $tiap;
 }
 
+$jurusan = array();
+$ambil_jur = $koneksi->query("SELECT * FROM jurusan ORDER BY nama_jurusan ASC");
+while($j = $ambil_jur->fetch_assoc()){
+    $jurusan[] = $j;
+}
+
 if (isset($_POST['simpan'])) {
     $nama_mapel = $_POST['nama_mapel'];
     $id_kategori = $_POST['id_kategori'];
+    $id_jurusan = $_POST['id_jurusan'];
 
     if (!empty($nama_mapel) && !empty($id_kategori)) {
         // Prevent SQL Injection using basic escaping for now to match project style
         $nama_mapel = $koneksi->real_escape_string($nama_mapel);
         $id_kategori = $koneksi->real_escape_string($id_kategori);
+        $id_jurusan_val = empty($id_jurusan) ? "NULL" : "'" . $koneksi->real_escape_string($id_jurusan) . "'";
         
-        $koneksi->query("INSERT INTO mapel (id_kategori, nama_mapel) VALUES ('$id_kategori', '$nama_mapel')");
+        $koneksi->query("INSERT INTO mapel (id_kategori, id_jurusan, nama_mapel) VALUES ('$id_kategori', $id_jurusan_val, '$nama_mapel')");
         
         echo "<script>alert('Mata Pelajaran berhasil ditambahkan');</script>";
         echo "<script>location='index.php?halaman=mapel';</script>";
@@ -61,11 +69,25 @@ if (isset($_POST['simpan'])) {
                     </div>
                     <p class="text-xs text-gray-400 mt-2"><i class="fas fa-info-circle mr-1"></i>Kategori mempengaruhi struktur rapor akademik.</p>
                 </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Peruntukan Jurusan</label>
+                    <div class="relative">
+                        <select name="id_jurusan"
+                            class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all outline-none bg-gray-50 focus:bg-white text-sm appearance-none cursor-pointer">
+                            <option value="">Umum (Berlaku untuk Semua Jurusan)</option>
+                            <?php foreach ($jurusan as $j): ?>
+                                <option value="<?= $j['id_jurusan'] ?>"><?= $j['nama_jurusan'] ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <i class="fas fa-chevron-down absolute right-4 top-3.5 text-gray-400 pointer-events-none"></i>
+                    </div>
+                </div>
             </div>
 
             <div class="pt-4 border-t border-gray-100 flex justify-end">
                 <button type="submit" name="simpan" class="bg-primary-600 text-white hover:bg-primary-700 px-6 py-2.5 rounded-xl text-sm font-bold transition-all shadow-md hover:shadow-lg flex items-center">
-                    <i class="fas fa-save mr-2"></i> Simpan Mata Pelajaran
+                    <i class="fas fa-save mr-2"></i> Simpan
                 </button>
             </div>
         </form>

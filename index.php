@@ -1,4 +1,7 @@
+
+
 <?php
+session_start();
 include './config/config.php';
 
 if (isset($_POST['login'])) {
@@ -11,6 +14,15 @@ if (isset($_POST['login'])) {
     if (!empty($cekadmin)) {
         $_SESSION["admin"] = $cekadmin;
         echo "<script>alert('Login admin berhasil'); location='admin/index.php';</script>";
+        exit;
+    }
+
+    // login guru
+    $ambilguru = $koneksi->query("SELECT * FROM guru WHERE (nama_guru='$username' OR induk_guru='$username') AND pw_guru='" . sha1($password) . "'");
+    $cekguru = $ambilguru->fetch_assoc();
+    if (!empty($cekguru)) {
+        $_SESSION["guru"] = $cekguru;
+        echo "<script>alert('Selamat datang, {$cekguru['nama_guru']}!'); location='guru/index.php';</script>";
         exit;
     }
 
@@ -130,12 +142,12 @@ if (isset($_POST['login'])) {
                             <i class="fas fa-user-lock text-3xl"></i>
                         </div>
                         <h2 class="text-2xl font-bold text-white">Login Portal</h2>
-                        <p class="text-gray-300 text-sm mt-1">Masuk sebagai Wali Siswa atau Admin</p>
+                        <p class="text-gray-300 text-sm mt-1">Masuk sebagai Admin, Guru, atau Wali Siswa</p>
                     </div>
 
                     <form method="post" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Username / Nama Siswa</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Username / Nama</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                     <i class="fas fa-user"></i>
@@ -145,7 +157,7 @@ if (isset($_POST['login'])) {
                         </div>
                         
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Password / NISN</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-1">Password / NISN / NIP</label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
                                     <i class="fas fa-lock"></i>
